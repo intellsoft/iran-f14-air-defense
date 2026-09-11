@@ -134,7 +134,7 @@ h2.h2{font-size:30px;font-weight:900;margin:0 0 4px}
           <select id="set-qual"><option value="low">کم</option><option value="med" selected>متوسط</option><option value="high">زیاد</option></select></div>
         <div class="srow"><label>معکوس‌سازی پیچ</label><input type="checkbox" id="set-inv"></div>
       </div>
-      <div class="foot mono">V1.2 ▮ SAVE: BROWSER LOCAL ▮ TOTAL STARS: <span id="stars-total">0/15</span></div>
+      <div class="foot mono">V1.4 ▮ SAVE: BROWSER LOCAL ▮ TOTAL STARS: <span id="stars-total">0/15</span></div>
     </div>
     <div>
       <div class="panel boot"><div class="ptitle">POST-FLIGHT DIAGNOSTICS</div><pre id="bootlog"></pre></div>
@@ -170,8 +170,8 @@ h2.h2{font-size:30px;font-weight:900;margin:0 0 4px}
       <div>راسته (سکان) <span><kbd>A</kbd> <kbd>D</kbd></span></div>
       <div>رانش (تریل) <span><kbd>W</kbd> <kbd>S</kbd></span></div>
       <div>توپ ۲۰ میلی‌متری M61 <span><kbd>Space</kbd></span></div>
-      <div>موشک AIM-54 فینیکس <span><kbd>E</kbd></span></div>
-      <div>موشک AIM-7 اسپارو <span><kbd>B</kbd></span></div>
+      <div>موشک AIM-54 فینیکس (رادار فعال) <span><kbd>E</kbd></span></div>
+      <div>موشک AIM-7 اسپارو (نیاز به قفل) <span><kbd>B</kbd></span></div>
       <div>شراره ضد موشک <span><kbd>F</kbd></span></div>
       <div>ترمز هوایی (نگه‌دار) <span><kbd>X</kbd></span></div>
       <div>دوربین کابین / تعقیب <span><kbd>C</kbd></span></div>
@@ -179,12 +179,14 @@ h2.h2{font-size:30px;font-weight:900;margin:0 0 4px}
     </div>
     <div class="stripe"></div>
     <p style="line-height:2.1;font-size:14px;color:#d8b896">
-      ● شما خلبان جنگندهٔ F-14A تامکت نیروی هوایی ایران هستید. وظیفه شما دفاع از حریم هوایی کشور در برابر موج‌های حملهٔ پهپاد و جنگنده‌های متخاصم است.<br>
-      ● پهپادها در جلوی شما ظاهر می‌شوند — رادار پایین صفحه نقاط قرمز را نشان می‌دهد.<br>
-      ● موشک فینیکس (E) برای درگیری فاصلهٔ بلند مناسب است — نیازی به قفل کامل نیست.<br>
-      ● موشک اسپارو (B) نیاز به قفل کامل دارد — نشانگر را روی هدف نگه دارید.<br>
-      ● شهرها و سایت‌های استراتژیک نباید آسیب ببینند؛ اگر ۳ هدف روی زمین منهدم شوند، ماموریت شکست می‌خورد.<br>
-      ● هنگام هشدار «موشک دشمن»، با <kbd>F</kbd> شراره بریزید و تند بپیچید.
+      ● شما خلبان جنگندهٔ F-14A تامکت نیروی هوایی ایران هستید.<br>
+      ● دشمنان به‌صورت خودکار در فاصله‌ای نزدیک در جلوی شما ظاهر می‌شوند.<br>
+      ● <b>فینیکس (E)</b>: رادار فعال — بعد از شلیک می‌توانید دور شوید. پنل بالا-راست وضعیت را نشان می‌دهد.<br>
+      ● <b>اسپارو (B)</b>: نیاز به قفل کامل دارد.<br>
+      ● <b>پنل اهداف</b> در بالای صفحه وضعیت همهٔ اهداف را نشان می‌دهد. هر هدف که کامل شود، پیام موفقیت ظاهر می‌شود.<br>
+      ● اگر پهپاد یا کروز به شهر برسد، شهر آسیب می‌بیند و <b>به‌عنوان کشته حساب نمی‌شود</b>.<br>
+      ● اگر ۳ شهر سقوط کند، ماموریت شکست می‌خورد.<br>
+      ● هنگام هشدار «MISSILE»، با <kbd>F</kbd> شراره بریزید و تند بپیچید.
     </p>
     <button class="mbtn small" id="btn-back2">◂ بازگشت</button>
   </div>
@@ -332,7 +334,8 @@ const G={screen:'menu',paused:false,time:0,state:'idle',mi:0,mission:null,
  killCount:{},score:0,kills:0,shots:0,hits:0,dmgTaken:0,msgs:[],ann:null,lock:{t:null,tt:0,st:0},
  camMode:'chase',endT:0,failReason:'',beepT:0,rwrT:0,fl:0,boundW:false,stallHint:false,tut:null,
  citiesLost:0,
- mCenter:v3(),runway:null,spawn:null,objectives:[],at:{t:0}};
+ mCenter:v3(),runway:null,spawn:null,objectives:[],at:{t:0},
+ activeMslHUD:[]};
 
 function resize(){
   Wpx=innerWidth;Hpx=innerHeight;W2=Wpx/2;H2c=Hpx/2;
@@ -365,7 +368,8 @@ function resetWorld(){flats=[];G.enemies=[];G.projs=[];G.missiles=[];G.bombs=[];
   G.rings=[];G.clouds=[];G.spawns=[];G.scorch=[];G.cities=[];
   G.killCount={};G.score=0;G.kills=0;G.shots=0;G.hits=0;G.dmgTaken=0;G.citiesLost=0;
   G.msgs=[];G.ann=null;G.lock={t:null,tt:0,st:0};G.time=0;G.endT=0;G.runway=null;G.spawn=null;
-  G.objectives=[];G.boundW=false;G.stallHint=false;G.tut=null;CAM.shake=0;}
+  G.objectives=[];G.boundW=false;G.stallHint=false;G.tut=null;CAM.shake=0;
+  G.activeMslHUD=[];}
 function makeClouds(cx,cy){const n=QUAL.clouds;for(let i=0;i<n;i++){
   const off=[];for(let k=0;k<3;k++)off.push([rnd(-.5,.5),rnd(-.25,.25),rnd(.5,.9)]);
   G.clouds.push({p:v3(cx+rnd(-9000,9000),cy+rnd(-9000,9000),rnd(1300,2600)),s:rnd(340,950),a:rnd(.13,.26),off});}}
@@ -373,6 +377,26 @@ function makeClouds(cx,cy){const n=QUAL.clouds;for(let i=0;i<n;i++){
 function spawnCity(x,y,name){
   flats.push({x,y,r:500,h:terrainH(x,y)});
   G.cities.push({x,y,z:terrainH(x,y)+4,name,hp:100,alive:true});}
+
+// ========== SPAWN NEAR PLAYER (instead of fixed coordinates) ==========
+function spawnNearPlayer(type, minDist, maxDist, altMin, altMax, tag){
+  if(!G.player){
+    return spawnAir(type, 0, 0, 800, tag);
+  }
+  const p = G.player;
+  const dist = rnd(minDist, maxDist);
+  // Spawn in a cone in front of the player's heading, with some random spread
+  const heading = Math.atan2(p.f.x, p.f.y);
+  const spread = rnd(-0.9, 0.9); // about ±50 degrees
+  const angle = heading + spread;
+  const x = p.pos.x + Math.sin(angle) * dist;
+  const y = p.pos.y + Math.cos(angle) * dist;
+  const z = rnd(altMin, altMax);
+  // Ensure above terrain
+  const groundH = terrainH(x, y);
+  const finalZ = Math.max(z, groundH + 100);
+  return spawnAir(type, x, y, finalZ, tag);
+}
 
 function spawnAir(type,x,y,z,tag){
   const tgt = G.player ? G.player.pos : v3(0,0,800);
@@ -384,40 +408,43 @@ function spawnAir(type,x,y,z,tag){
   spd:type==='drone'?205:type==='cruise'?240:type==='ace'?290:270,
   turn:type==='drone'?.9:type==='ace'?1.6:type==='cruise'?.4:1.3,
   range:750, r:type==='drone'?7:type==='cruise'?6:9,dead:false,evade:0,evadeDir:v3(),
-  state:'attack',stateT:0,tgtCity:null};
+  state:'attack',stateT:0,tgtCity:null, reachedCity:false};
   if(type==='cruise'&&G.cities.length){
-    e.tgtCity=G.cities[Math.floor(Math.random()*G.cities.length)];
+    // Pick the closest alive city to spawn target
+    let bestCity = null, bestD = 1e18;
+    for(const c of G.cities){
+      if(!c.alive) continue;
+      const d = dist(v3(x,y,z), v3(c.x,c.y,c.z));
+      if(d < bestD){ bestD = d; bestCity = c; }
+    }
+    e.tgtCity = bestCity || G.cities[0];
     e.vel=mul(norm(sub(v3(e.tgtCity.x,e.tgtCity.y,e.tgtCity.z+100),e.pos)),e.spd);
   }
   G.enemies.push(e);return e;}
 
-const objKill=(tag,total,label)=>({label,done:()=>(G.killCount[tag]||0)>=total,prog:()=>`${Math.min(G.killCount[tag]||0,total)}/${total}`});
-const objDefend=(label)=>({label,done:()=>G.citiesLost<3,prog:()=>`شهرهای از دست رفته: ${G.citiesLost}/3`});
+const objKill=(tag,total,label)=>({label,done:()=>(G.killCount[tag]||0)>=total,prog:()=>`${Math.min(G.killCount[tag]||0,total)}/${total}`,notified:false});
+const objDefend=(label)=>({label,done:()=>G.citiesLost<3,prog:()=>`شهرهای از دست رفته: ${G.citiesLost}/3`,notified:false});
 
+// ========= MISSIONS WITH FIXED SPAWNS =========
 const MISSIONS=[
 {id:0,name:'آموزش دفاع هوایی',code:'TRAINING INTERCEPT',threat:1,par:180,s2:900,s3:1300,
- desc:'آموزش رهگیری: پهپادهای آموزشی مستقیماً به سمت شما و شهر می‌آیند. آن‌ها را با موشک یا توپ منهدم کنید.',
+ desc:'آموزش رهگیری: پهپادهای آموزشی مستقیماً به سمت شما و شهر می‌آیند.',
  lo:{ammo:320,msl:4,bomb:0,flare:4},
  build(){spawnCity(0,2500,'شهر آموزشی');
   G.spawn={pos:v3(0,-2500,700),hdg:0,spd:180,thr:.7};
   G.objectives=[objKill('drone',6,'انهدام پهپادهای آموزشی'),objDefend('حفاظت از شهر')];
   G.spawns=[
    {t:2,fn:()=>{
-     spawnAir('drone',  200,   500, 700, 'drone');
-     spawnAir('drone', -300,   800, 720, 'drone');
-     spawnAir('drone',  100,  1100, 680, 'drone');
+     for(let i=0;i<3;i++) spawnNearPlayer('drone', 2800, 3800, 600, 900, 'drone');
      announce('موج اول','۳ پهپاد — مستقیم روبرو');
    }},
-   {cond:()=>(G.killCount.drone||0)>=2,delay:3,fn:()=>{
-     spawnAir('drone',  400, 1500, 750, 'drone');
-     spawnAir('drone', -200, 1800, 720, 'drone');
-     spawnAir('drone',  300, 2100, 700, 'drone');
+   {cond:()=>(G.killCount.drone||0)>=2,delay:2,fn:()=>{
+     for(let i=0;i<3;i++) spawnNearPlayer('drone', 3000, 4000, 650, 950, 'drone');
      addMsg('موج دوم — ۳ پهپاد دیگر در مسیر');
    }},
-   {t:25,fn:()=>{
+   {t:30,fn:()=>{
      if((G.killCount.drone||0) < 4){
-       spawnAir('drone', 0, 1000, 720, 'drone');
-       spawnAir('drone', 200, 1200, 700, 'drone');
+       for(let i=0;i<2;i++) spawnNearPlayer('drone', 2500, 3500, 700, 850, 'drone');
        addMsg('تقویت دشمن — ۲ پهپاد اضافی');
      }
    }}
@@ -427,82 +454,190 @@ const MISSIONS=[
 {id:1,name:'دفاع از تهران',code:'TEHRAN SHIELD',threat:2,par:360,s2:2400,s3:3400,
  desc:'موج بزرگی از پهپادهای انتحاری به سمت تهران در حال نزدیک شدن است.',
  lo:{ammo:380,msl:6,bomb:0,flare:6},
- build(){spawnCity(8000,3000,'تهران');
-  G.spawn={pos:v3(8000,-3500,800),hdg:0,spd:190,thr:.7};
+ build(){spawnCity(0,2500,'تهران');
+  G.spawn={pos:v3(0,-2500,800),hdg:0,spd:190,thr:.7};
   G.objectives=[objKill('drone',8,'انهدام پهپادهای انتحاری'),objDefend('حفاظت از تهران')];
   G.spawns=[
-   {t:2,fn:()=>{spawnAir('drone',7500,500,350,'drone');spawnAir('drone',8500,800,380,'drone');
-     spawnAir('drone',8000,1100,400,'drone');
-     announce('هشدار','موج اول پهپادها در مسیر تهران');}},
-   {cond:()=>(G.killCount.drone||0)>=3,delay:5,fn:()=>{for(let i=0;i<3;i++)spawnAir('drone',7500+i*300,1500,380+i*20,'drone');
-     addMsg('موج دوم — ۳ پهپاد دیگر');}},
-   {cond:()=>(G.killCount.drone||0)>=6,delay:5,fn:()=>{for(let i=0;i<2;i++)spawnAir('drone',8000+i*400-200,2000,420,'drone');
-     addMsg('موج نهایی — همه را سرنگون کنید!');}}];
-  makeClouds(8000,5000);}},
+   {t:2,fn:()=>{
+     for(let i=0;i<3;i++) spawnNearPlayer('drone', 3200, 4200, 500, 750, 'drone');
+     announce('هشدار','موج اول پهپادها در مسیر تهران');
+   }},
+   {cond:()=>(G.killCount.drone||0)>=3,delay:3,fn:()=>{
+     for(let i=0;i<3;i++) spawnNearPlayer('drone', 3500, 4500, 550, 800, 'drone');
+     addMsg('موج دوم — ۳ پهپاد دیگر');
+   }},
+   {cond:()=>(G.killCount.drone||0)>=6,delay:3,fn:()=>{
+     for(let i=0;i<2;i++) spawnNearPlayer('drone', 3000, 4000, 600, 850, 'drone');
+     addMsg('موج نهایی — همه را سرنگون کنید!');
+   }},
+   {t:45,fn:()=>{
+     // Fallback: if not enough killed, spawn more
+     const remaining = 8 - (G.killCount.drone||0);
+     if(remaining > 0){
+       for(let i=0;i<Math.min(remaining,3);i++) spawnNearPlayer('drone', 2800, 3800, 500, 750, 'drone');
+       addMsg('تقویت — پهپادهای جدید');
+     }
+   }}
+  ];
+  makeClouds(0,3000);}},
 
 {id:2,name:'پدافند خلیج فارس',code:'PERSIAN GULF DEFENSE',threat:3,par:420,s2:3000,s3:4200,
  desc:'جنگنده‌های متخاصم و موشک‌های کروز از دریا به سمت سایت‌های نفتی نزدیک می‌شوند.',
  lo:{ammo:400,msl:6,bomb:0,flare:8},
- build(){spawnCity(-6000,7000,'بندر عباس');spawnCity(-5200,7800,'سایت نفتی');
-  G.spawn={pos:v3(-6000,2500,900),hdg:0,spd:200,thr:.75};
+ build(){spawnCity(0,2500,'بندر عباس');spawnCity(800,2800,'سایت نفتی');
+  G.spawn={pos:v3(0,-2500,900),hdg:0,spd:200,thr:.75};
   G.objectives=[objKill('fighter',3,'سرنگونی جنگنده‌های دشمن'),
                 objKill('cruise',4,'انهدام موشک‌های کروز'),
                 objDefend('حفاظت از سایت‌ها')];
   G.spawns=[
-   {t:3,fn:()=>{spawnAir('cruise',-6500,5000,120,'cruise');spawnAir('cruise',-5500,5200,100,'cruise');
-     spawnAir('fighter',-5800,4500,800,'fighter');
-     announce('درگیری','جنگنده + موشک کروز');}},
-   {cond:()=>(G.killCount.cruise||0)>=2,delay:5,fn:()=>{spawnAir('cruise',-6800,5800,110,'cruise');
-     spawnAir('cruise',-5200,6000,130,'cruise');spawnAir('fighter',-6000,5200,850,'fighter');
-     addMsg('موج دوم — جنگنده و کروز');}},
-   {cond:()=>(G.killCount.cruise||0)>=3,delay:6,fn:()=>{spawnAir('fighter',-5500,6500,900,'fighter');
-     spawnAir('cruise',-6200,6200,120,'cruise');addMsg('تقویت دشمن');}}];
-  makeClouds(-6000,8000);}},
+   // Wave 1: 2 cruise + 1 fighter
+   {t:2,fn:()=>{
+     spawnNearPlayer('cruise', 3500, 4500, 100, 200, 'cruise');
+     spawnNearPlayer('cruise', 3800, 4800, 120, 220, 'cruise');
+     spawnNearPlayer('fighter', 4000, 5000, 750, 950, 'fighter');
+     announce('درگیری','۲ کروز + ۱ جنگنده — در فاصلهٔ ۳ تا ۵ کیلومتری');
+   }},
+   // Wave 2: after any 3 kills (any type)
+   {cond:()=>((G.killCount.cruise||0) + (G.killCount.fighter||0))>=2, delay:3, fn:()=>{
+     spawnNearPlayer('cruise', 3200, 4200, 100, 200, 'cruise');
+     spawnNearPlayer('cruise', 3500, 4500, 120, 220, 'cruise');
+     spawnNearPlayer('fighter', 3800, 4800, 800, 1000, 'fighter');
+     addMsg('موج دوم — ۲ کروز + ۱ جنگنده');
+     announce('موج دوم','تقویت دشمن');
+   }},
+   // Wave 3: after any 5 kills
+   {cond:()=>((G.killCount.cruise||0) + (G.killCount.fighter||0))>=4, delay:3, fn:()=>{
+     spawnNearPlayer('fighter', 3500, 4500, 850, 1050, 'fighter');
+     spawnNearPlayer('cruise', 3000, 4000, 100, 200, 'cruise');
+     addMsg('موج سوم — ۱ جنگنده + ۱ کروز');
+   }},
+   // Fallback at t=40: if not enough killed, spawn extra
+   {t:40,fn:()=>{
+     const total = (G.killCount.cruise||0) + (G.killCount.fighter||0);
+     if(total < 5){
+       spawnNearPlayer('cruise', 2500, 3500, 100, 200, 'cruise');
+       spawnNearPlayer('fighter', 3000, 4000, 800, 1000, 'fighter');
+       addMsg('تقویت — ۱ کروز + ۱ جنگنده');
+     }
+   }},
+   // Fallback at t=70: last wave
+   {t:70,fn:()=>{
+     const total = (G.killCount.cruise||0) + (G.killCount.fighter||0);
+     if(total < 7){
+       for(let i=0;i<2;i++) spawnNearPlayer('cruise', 2500, 3500, 100, 200, 'cruise');
+       spawnNearPlayer('fighter', 3000, 4000, 850, 1000, 'fighter');
+       addMsg('موج نهایی — همه را بزنید!');
+     }
+   }}
+  ];
+  makeClouds(0,3000);}},
 
 {id:3,name:'دفاع از اصفهان',code:'ISFAHAN SHIELD',threat:4,par:480,s2:3600,s3:5000,
  desc:'ترکیبی از جنگنده، پهپاد و موشک کروز به سمت اصفهان حرکت می‌کنند.',
  lo:{ammo:480,msl:8,bomb:0,flare:10},
- build(){spawnCity(4000,-8000,'اصفهان');
-  G.spawn={pos:v3(4000,-13000,900),hdg:0,spd:200,thr:.75};
+ build(){spawnCity(0,2500,'اصفهان');
+  G.spawn={pos:v3(0,-2500,900),hdg:0,spd:200,thr:.75};
   G.objectives=[objKill('fighter',3,'سرنگونی جنگنده‌ها'),
                 objKill('drone',4,'انهدام پهپادها'),
                 objKill('ace',1,'سرنگونی تک‌خال'),
                 objDefend('حفاظت از اصفهان')];
   G.spawns=[
-   {t:2,fn:()=>{spawnAir('drone',3800,-7000,400,'drone');spawnAir('drone',4200,-7200,450,'drone');
-     spawnAir('fighter',4000,-6500,900,'fighter');
-     announce('درگیری','موج ترکیبی در راه');}},
-   {cond:()=>(G.killCount.drone||0)>=2,delay:5,fn:()=>{spawnAir('drone',4400,-7500,420,'drone');
-     spawnAir('drone',3600,-7800,380,'drone');spawnAir('fighter',4200,-6800,950,'fighter');
-     addMsg('موج دوم — ادامهٔ درگیری');}},
-   {cond:()=>(G.killCount.fighter||0)>=2,delay:5,fn:()=>{spawnAir('ace',4000,-6000,1100,'ace');
-     announce('هشدار','تک‌خال دشمن وارد میدان شد');}}];
-  makeClouds(4000,-9000);}},
+   {t:2,fn:()=>{
+     for(let i=0;i<2;i++) spawnNearPlayer('drone', 3200, 4200, 600, 900, 'drone');
+     spawnNearPlayer('fighter', 3800, 4800, 800, 1000, 'fighter');
+     announce('درگیری','۲ پهپاد + ۱ جنگنده');
+   }},
+   {cond:()=>((G.killCount.drone||0) + (G.killCount.fighter||0))>=2, delay:3, fn:()=>{
+     for(let i=0;i<2;i++) spawnNearPlayer('drone', 3000, 4000, 600, 900, 'drone');
+     spawnNearPlayer('fighter', 3500, 4500, 850, 1050, 'fighter');
+     addMsg('موج دوم — ۲ پهپاد + ۱ جنگنده');
+   }},
+   {cond:()=>((G.killCount.drone||0) + (G.killCount.fighter||0))>=4, delay:3, fn:()=>{
+     spawnNearPlayer('ace', 4000, 5000, 1100, 1300, 'ace');
+     addMsg('تک‌خال دشمن وارد میدان شد');
+     announce('هشدار','تک‌خال دشمن');
+   }},
+   {cond:()=>((G.killCount.drone||0) + (G.killCount.fighter||0) + (G.killCount.ace||0))>=6, delay:3, fn:()=>{
+     spawnNearPlayer('fighter', 3500, 4500, 900, 1100, 'fighter');
+     spawnNearPlayer('drone', 3000, 4000, 600, 850, 'drone');
+     addMsg('موج نهایی — جنگنده و پهپاد');
+   }},
+   {t:50,fn:()=>{
+     const total = (G.killCount.drone||0) + (G.killCount.fighter||0) + (G.killCount.ace||0);
+     if(total < 6){
+       spawnNearPlayer('drone', 2800, 3800, 650, 900, 'drone');
+       spawnNearPlayer('fighter', 3200, 4200, 850, 1050, 'fighter');
+       addMsg('تقویت — ۱ پهپاد + ۱ جنگنده');
+     }
+   }},
+   {t:80,fn:()=>{
+     if((G.killCount.ace||0) < 1){
+       spawnNearPlayer('ace', 3500, 4500, 1100, 1300, 'ace');
+       addMsg('تک‌خال دوم ظاهر شد!');
+     }
+   }}
+  ];
+  makeClouds(0,3000);}},
 
 {id:4,name:'عملیات سپر ایران',code:'OPERATION IRAN SHIELD',threat:5,par:540,s2:4200,s3:5800,
  desc:'حملهٔ نهایی دشمن: موج عظیمی از پهپاد، جنگنده، کروز و تک‌خال به سمت چندین شهر ایران.',
  lo:{ammo:560,msl:10,bomb:0,flare:12},
- build(){spawnCity(-3000,-10000,'شهر ۱');spawnCity(-4500,-9000,'شهر ۲');spawnCity(-2000,-11500,'شهر ۳');
-  G.spawn={pos:v3(-3500,-14500,950),hdg:0,spd:210,thr:.75};
+ build(){spawnCity(-500,2500,'شهر ۱');spawnCity(500,2700,'شهر ۲');spawnCity(0,3000,'شهر ۳');
+  G.spawn={pos:v3(0,-2500,950),hdg:0,spd:210,thr:.75};
   G.objectives=[objKill('drone',10,'انهدام پهپادها'),
                 objKill('fighter',4,'سرنگونی جنگنده‌ها'),
                 objKill('cruise',5,'انهدام موشک‌های کروز'),
                 objKill('ace',2,'سرنگونی تک‌خال‌ها'),
                 objDefend('حفاظت از شهرها')];
   G.spawns=[
-   {t:2,fn:()=>{for(let i=0;i<4;i++)spawnAir('drone',-3000+i*300,-12000,350+i*30,'drone');
-     announce('حملهٔ نهایی','موج اول پهپاد');}},
-   {cond:()=>(G.killCount.drone||0)>=4,delay:6,fn:()=>{spawnAir('fighter',-2800,-11500,900,'fighter');
-     spawnAir('fighter',-3800,-11800,950,'fighter');
-     spawnAir('cruise',-3200,-11000,120,'cruise');spawnAir('cruise',-3600,-11200,100,'cruise');
-     addMsg('موج دوم — جنگنده و کروز');}},
-   {cond:()=>(G.killCount.fighter||0)>=2,delay:6,fn:()=>{for(let i=0;i<3;i++)spawnAir('drone',-3200+i*250,-10800,380,'drone');
-     spawnAir('cruise',-3500,-10500,110,'cruise');spawnAir('cruise',-3000,-10700,130,'cruise');
-     addMsg('موج سوم — کروز و پهپاد');}},
-   {cond:()=>(G.killCount.cruise||0)>=3,delay:5,fn:()=>{spawnAir('ace',-3500,-10000,1200,'ace');
-     spawnAir('ace',-3200,-10200,1150,'ace');
-     announce('هشدار','دو تک‌خال دشمن — آخرین مقاومت');}}];
-  makeClouds(-3500,-10000);}}];
+   {t:2,fn:()=>{
+     for(let i=0;i<4;i++) spawnNearPlayer('drone', 3200, 4200, 500, 800, 'drone');
+     announce('حملهٔ نهایی','موج اول پهپاد');
+   }},
+   {cond:()=>((G.killCount.drone||0))>=3, delay:3, fn:()=>{
+     spawnNearPlayer('fighter', 3800, 4800, 850, 1050, 'fighter');
+     spawnNearPlayer('fighter', 4000, 5000, 900, 1100, 'fighter');
+     spawnNearPlayer('cruise', 3500, 4500, 100, 200, 'cruise');
+     spawnNearPlayer('cruise', 3800, 4800, 120, 220, 'cruise');
+     addMsg('موج دوم — ۲ جنگنده + ۲ کروز');
+   }},
+   {cond:()=>((G.killCount.drone||0) + (G.killCount.fighter||0) + (G.killCount.cruise||0))>=6, delay:3, fn:()=>{
+     for(let i=0;i<3;i++) spawnNearPlayer('drone', 3000, 4000, 500, 800, 'drone');
+     spawnNearPlayer('cruise', 3200, 4200, 100, 200, 'cruise');
+     spawnNearPlayer('cruise', 3500, 4500, 120, 220, 'cruise');
+     addMsg('موج سوم — ۳ پهپاد + ۲ کروز');
+   }},
+   {cond:()=>((G.killCount.drone||0) + (G.killCount.fighter||0) + (G.killCount.cruise||0))>=12, delay:3, fn:()=>{
+     spawnNearPlayer('ace', 4000, 5000, 1100, 1300, 'ace');
+     spawnNearPlayer('ace', 4200, 5200, 1150, 1350, 'ace');
+     addMsg('دو تک‌خال دشمن — آخرین مقاومت');
+     announce('هشدار','دو تک‌خال دشمن');
+   }},
+   {t:45,fn:()=>{
+     const total = (G.killCount.drone||0) + (G.killCount.fighter||0) + (G.killCount.cruise||0);
+     if(total < 8){
+       for(let i=0;i<2;i++) spawnNearPlayer('drone', 2800, 3800, 500, 800, 'drone');
+       spawnNearPlayer('cruise', 3000, 4000, 100, 200, 'cruise');
+       addMsg('تقویت — پهپاد و کروز');
+     }
+   }},
+   {t:70,fn:()=>{
+     const total = (G.killCount.drone||0) + (G.killCount.fighter||0) + (G.killCount.cruise||0) + (G.killCount.ace||0);
+     if(total < 15){
+       spawnNearPlayer('fighter', 3500, 4500, 900, 1100, 'fighter');
+       spawnNearPlayer('fighter', 3800, 4800, 950, 1150, 'fighter');
+       spawnNearPlayer('cruise', 3000, 4000, 100, 200, 'cruise');
+       addMsg('موج اضافی');
+     }
+   }},
+   {t:95,fn:()=>{
+     if((G.killCount.ace||0) < 2){
+       spawnNearPlayer('ace', 3500, 4500, 1100, 1300, 'ace');
+       addMsg('تک‌خال اضافه');
+     }
+   }}
+  ];
+  makeClouds(0,3000);}}];
 
 function startMission(i){
   resetWorld();G.mi=i;const m=MISSIONS[i];G.mission=m;m.build();
@@ -539,7 +674,13 @@ function flashDmg(){const f=document.getElementById('flash');f.style.opacity=.9;
 const PTS={drone:400,fighter:800,ace:1200,cruise:600,sam:500,radar:400,bunker:800};
 function dmgEnemy(e,d,byPlayer){if(!e||e.dead)return;e.hp-=d;
   if(e.type==='fighter'||e.type==='ace'){e.evade=1.6;e.evadeDir=norm(v3(rnd(-1,1),rnd(-1,1),0));}
-  if(e.hp<=0){e.dead=true;explode(e.pos,e.ground?2.6:e.type==='drone'?1.2:e.type==='cruise'?1.0:2);
+  if(e.hp<=0){e.dead=true;
+    // mark any tracking player missiles that targeted this enemy as "hit"
+    for(const h of G.activeMslHUD){if(h.mslRef && h.mslRef.tgt===e && !h.resolved){
+      h.resolved=true;h.result='HIT';h.endT=G.time+1.8;
+      addMsg('✓ '+h.type+' اصابت کرد!','#7dff8e',2.2);
+    }}
+    explode(e.pos,e.ground?2.6:e.type==='drone'?1.2:e.type==='cruise'?1.0:2);
     if(byPlayer){G.kills++;G.killCount[e.tag]=(G.killCount[e.tag]||0)+1;G.score+=PTS[e.tag]||500;
       const label=e.type==='drone'?'پهپاد':e.type==='cruise'?'کروز':e.type==='ace'?'تک‌خال':'جنگنده';
       addMsg(label+' منهدم شد  +'+(PTS[e.tag]||500),'#ffd76a');}}
@@ -550,15 +691,39 @@ function fireMissile(type){const P=G.player,L=G.lock;
     if(!P.phoenixes||P.phoenixes<=0){addMsg('موشک فینیکس باقی نمانده','#ff9c9c',2);return;}
     if(!L.t||L.t.dead||L.st<1){addMsg('ابتدا قفل کنید — نشانگر روی هدف','#ffb454',2.5);return;}
     P.phoenixes--;
-    G.missiles.push({pos:add(P.pos,add(mul(P.f,3.5),mul(P.u,-1))),vel:add(mul(P.f,350),P.vel),
-      tgt:L.t,turn:4.5,life:9,from:'p',spd:380,trailT:0,mslType:'phoenix'});
-    AU.msl();addMsg('فینیکس شلیک شد','#cfeecb',2);
+    const tgt=L.t;
+    const launchTargetPos={...tgt.pos};
+    const launchTargetVel=tgt.vel?{...tgt.vel}:v3();
+    const msl={pos:add(P.pos,add(mul(P.f,3.5),mul(P.u,-1))),vel:add(mul(P.f,350),P.vel),
+      tgt:tgt, lastKnownPos:launchTargetPos, lastKnownVel:launchTargetVel,
+      turn:4.5, life:9, from:'p', spd:380, trailT:0, mslType:'phoenix',
+      activeRadar:true,
+      launchTime:G.time, id:Math.random()};
+    G.missiles.push(msl);
+    G.activeMslHUD.push({
+      id:msl.id, type:'PHX', mslRef:msl,
+      startT:G.time, resolved:false, result:'TRACK', endT:0,
+      lastDist:0, lastETA:0
+    });
+    AU.msl();addMsg('فینیکس شلیک شد — رادار فعال فعال شد','#cfeecb',3);
   }else{
     if(!P.sparrows||P.sparrows<=0){addMsg('موشک اسپارو باقی نمانده','#ff9c9c',2);return;}
     if(L.st!==2||!L.t||L.t.dead){addMsg('قفل کامل لازم است — نشانگر را روی هدف نگه دارید','#ffb454',2.5);return;}
     P.sparrows--;
-    G.missiles.push({pos:add(P.pos,add(mul(P.f,3.5),mul(P.u,-1))),vel:add(mul(P.f,300),P.vel),
-      tgt:L.t,turn:5.2,life:7,from:'p',spd:320,trailT:0,mslType:'sparrow'});
+    const tgt=L.t;
+    const launchTargetPos={...tgt.pos};
+    const launchTargetVel=tgt.vel?{...tgt.vel}:v3();
+    const msl={pos:add(P.pos,add(mul(P.f,3.5),mul(P.u,-1))),vel:add(mul(P.f,300),P.vel),
+      tgt:tgt, lastKnownPos:launchTargetPos, lastKnownVel:launchTargetVel,
+      turn:5.2, life:7, from:'p', spd:320, trailT:0, mslType:'sparrow',
+      activeRadar:false,
+      launchTime:G.time, id:Math.random()};
+    G.missiles.push(msl);
+    G.activeMslHUD.push({
+      id:msl.id, type:'SPR', mslRef:msl,
+      startT:G.time, resolved:false, result:'TRACK', endT:0,
+      lastDist:0, lastETA:0
+    });
     AU.msl();addMsg('اسپارو شلیک شد','#cfeecb',2);
   }
   L.st=0;L.tt=0;}
@@ -630,16 +795,23 @@ function updAir(e,dt){const P=G.player;
       if(cl>1e-4){const ang=Math.asin(clamp(cl,0,1)),step=Math.min(ang,e.turn*dt);
         e.vel=mul(rotAxisV(cur,norm(crx),step),e.spd);}
       e.pos=add(e.pos,mul(e.vel,dt));
-      if(dist(e.pos,v3(e.tgtCity.x,e.tgtCity.y,e.tgtCity.z))<180){
-        e.dead=true;explode(e.pos,2.2);
+      if(dist(e.pos,v3(e.tgtCity.x,e.tgtCity.y,e.tgtCity.z))<180 && !e.reachedCity){
+        e.reachedCity = true;
+        e.dead=true;
+        explode(e.pos,2.2);
         e.tgtCity.hp-=60;
+        // NOTE: This is NOT counted as a kill for the player - it's an enemy success
+        addMsg('⚠ کروز به '+e.tgtCity.name+' رسید — شهر آسیب دید!','#ff5f5f',4);
         if(e.tgtCity.hp<=0&&e.tgtCity.alive){
           e.tgtCity.alive=false;G.citiesLost++;
-          addMsg('⚠ '+e.tgtCity.name+' آسیب دید!','#ff5f5f',4);
           if(G.citiesLost>=3){G.state='fail';G.failReason='سه شهر از دست رفت';G.endT=2.5;
             announce('شکست','شهرها سقوط کردند');AU.engineOff();}
-        }else{
-          addMsg('⚠ موشک کروز به '+e.tgtCity.name+' اصابت کرد!','#ff8040');
+        }
+        // Mark any tracking missiles as missed (target destroyed without player kill)
+        for(const h of G.activeMslHUD){
+          if(h.mslRef && h.mslRef.tgt===e && !h.resolved){
+            h.resolved=true;h.result='MISSED';h.endT=G.time+1.8;
+          }
         }
         return;
       }
@@ -704,23 +876,89 @@ function updMissiles(dt){
   for(let i=G.missiles.length-1;i>=0;i--){const m=G.missiles[i];m.life-=dt;
     m.spd=Math.min(m.from==='p'?950:660,m.spd+280*dt);
     let tp=null;
-    if(m.from==='p'){if(m.tgt&&!m.tgt.dead)tp=m.tgt.pos;}
-    else{tp=m.tgt==='player'?(G.player&&!G.player.dead?G.player.pos:null):(m.tgt&&m.tgt.pos);
-      if(G.fl>0&&m.tgt==='player'&&G.flares.length&&Math.random()<dt*2.4){m.tgt=G.flares[0];tp=m.tgt.pos;addMsg('موشک فریب خورد!','#9fe8a0');}}
-    if(tp){const tv=(m.from==='p'&&m.tgt&&m.tgt.vel)?m.tgt.vel:v3();
+    if(m.from==='p'){
+      if(m.tgt && !m.tgt.dead && !m.tgt.reachedCity){
+        tp = m.tgt.pos;
+        m.lastKnownPos = {...m.tgt.pos};
+        m.lastKnownVel = m.tgt.vel ? {...m.tgt.vel} : v3();
+      }
+      else if(m.lastKnownPos){
+        const elapsed = G.time - (m.targetDiedAt || m.launchTime);
+        m.targetDiedAt = m.targetDiedAt || G.time;
+        const predicted = add(m.lastKnownPos, mul(m.lastKnownVel || v3(), elapsed));
+        tp = predicted;
+      }
+    } else {
+      tp=m.tgt==='player'?(G.player&&!G.player.dead?G.player.pos:null):(m.tgt&&m.tgt.pos);
+      if(G.fl>0&&m.tgt==='player'&&G.flares.length&&Math.random()<dt*2.4){
+        m.tgt=G.flares[0];tp=m.tgt.pos;addMsg('موشک فریب خورد!','#9fe8a0');}
+    }
+    if(tp){
+      let tv=v3();
+      if(m.from==='p'){
+        if(m.tgt && !m.tgt.dead && m.tgt.vel) tv = m.tgt.vel;
+        else if(m.lastKnownVel) tv = m.lastKnownVel;
+      } else if(m.from==='e' && m.tgt==='player' && G.player && !G.player.dead){
+        tv = G.player.vel;
+      }
       const lead=add(tp,mul(tv,dist(m.pos,tp)/m.spd*.6));
       const D=norm(sub(lead,m.pos)),cur=norm(m.vel),crx=cross(cur,D),cl=len(crx);
       if(cl>1e-4)m.vel=mul(rotAxisV(cur,norm(crx),Math.min(Math.asin(clamp(cl,0,1)),m.turn*dt)),m.spd);
       else m.vel=mul(cur,m.spd);
-      if(dist(m.pos,tp)<16){
-        if(m.from==='e'){if(m.tgt==='player'){dmgPlayer(34);explode(m.pos,1.4);}else explode(m.pos,.9);}
-        else{explode(m.pos,1.6);dmgEnemy(m.tgt,90,true);}
-        G.missiles.splice(i,1);continue;}}
+      const impactDist = 16;
+      if(dist(m.pos,tp)<impactDist){
+        if(m.from==='e'){
+          if(m.tgt==='player'){dmgPlayer(34);explode(m.pos,1.4);}else explode(m.pos,.9);
+        } else {
+          explode(m.pos,1.6);
+          if(m.tgt && !m.tgt.dead) dmgEnemy(m.tgt,90,true);
+          else {
+            for(const e of G.enemies)if(!e.dead && dist(e.pos,m.pos)<25) dmgEnemy(e,60,true);
+          }
+          for(const h of G.activeMslHUD){if(h.mslRef===m && !h.resolved){
+            h.resolved=true;h.result='HIT';h.endT=G.time+1.8;}}
+        }
+        G.missiles.splice(i,1);continue;
+      }
+    }
     m.trailT-=dt;if(m.trailT<=0){m.trailT=.03;
       addPart(m.pos,mul(m.vel,-.02),.7,.55,[210,210,205],'trail');}
     m.pos=add(m.pos,mul(m.vel,dt));
-    if(m.life<=0||m.pos.z<terrainH(m.pos.x,m.pos.y)+1){explode(m.pos,m.from==='p'?1.2:.9);
-      if(m.from==='p'&&m.tgt)dmgEnemy(m.tgt,30,true);G.missiles.splice(i,1);}}}
+    const hitGround = m.pos.z < terrainH(m.pos.x,m.pos.y)+1;
+    const lifeExpired = m.life<=0;
+    if(hitGround || lifeExpired){
+      if(m.from==='p'){
+        explode(m.pos, m.from==='p'?1.2:.9);
+        for(const h of G.activeMslHUD){if(h.mslRef===m && !h.resolved){
+          h.resolved=true;
+          h.result = hitGround ? 'GROUND' : 'MISSED';
+          h.endT = G.time + 2.2;
+          if(hitGround) addMsg('✗ '+h.type+' به زمین اصابت کرد','#ff9c9c',2.5);
+          else addMsg('✗ '+h.type+' از دست رفت','#ffb454',2.5);
+        }}
+      } else {
+        explode(m.pos,m.from==='p'?1.2:.9);
+      }
+      G.missiles.splice(i,1);
+    }
+  }
+  for(let j=G.activeMslHUD.length-1;j>=0;j--){
+    const h=G.activeMslHUD[j];
+    if(h.mslRef){
+      let tgtPos = null;
+      if(h.mslRef.tgt && !h.mslRef.tgt.dead && !h.mslRef.tgt.reachedCity) tgtPos = h.mslRef.tgt.pos;
+      else if(h.mslRef.lastKnownPos) tgtPos = h.mslRef.lastKnownPos;
+      if(tgtPos){
+        const d = dist(h.mslRef.pos, tgtPos);
+        h.lastDist = d;
+        h.lastETA = Math.max(0, d / Math.max(h.mslRef.spd, 50));
+      }
+    }
+    if(h.resolved && h.endT > 0 && G.time > h.endT){
+      G.activeMslHUD.splice(j,1);
+    }
+  }
+}
 
 function updFlares(dt){G.fl=Math.max(0,G.fl-dt);
   for(let i=G.flares.length-1;i>=0;i--){const f=G.flares[i];f.life-=dt;
@@ -740,7 +978,7 @@ function updParts(dt){
 function updLock(dt){const P=G.player,L=G.lock;
   if(!P||P.dead){L.st=0;L.t=null;return;}
   let best=null,bestA=9;
-  for(const e of G.enemies){if(e.dead)continue;const d=dist(e.pos,P.pos);if(d>6500)continue;
+  for(const e of G.enemies){if(e.dead||e.reachedCity)continue;const d=dist(e.pos,P.pos);if(d>6500)continue;
     const a=Math.acos(clamp(dot(P.f,norm(sub(e.pos,P.pos))),-1,1));
     if(a<.42&&a<bestA){bestA=a;best=e;}}
   if(best!==L.t){L.t=best;L.tt=0;}
@@ -752,7 +990,22 @@ function updSpawns(dt){for(const s of G.spawns){if(s.done)continue;
   if(s.t!==undefined){if(G.time>=s.t){s.done=true;s.fn();}}
   else if(s.cond&&s.cond()){s.ct=(s.ct||0)+dt;if(s.ct>=(s.delay||3)){s.done=true;s.fn();}}}}
 
-function checkObj(){if(G.state!=='play')return;
+// ========= IMPROVED OBJECTIVE CHECK WITH NOTIFICATIONS =========
+function checkObj(){
+  if(G.state!=='play')return;
+  
+  // Notify player when objectives are completed
+  for(const o of G.objectives){
+    if(!o.notified && o.done()){
+      o.notified = true;
+      // Play a success beep
+      AU.beep(1800, 0.2, 0.12);
+      setTimeout(()=>AU.beep(2200, 0.15, 0.1), 150);
+      addMsg('✓ هدف کامل شد: '+o.label, '#7dff8e', 4);
+      announce('هدف محقق شد', o.label);
+    }
+  }
+  
   const killObjDone = G.objectives.filter(o=>o.label.includes('انهدام')||o.label.includes('سرنگونی')).every(o=>o.done());
   const defendOk = G.objectives.filter(o=>o.label.includes('حفاظت')).every(o=>o.done());
   const allSpawned = G.spawns.every(s=>s.done);
@@ -830,7 +1083,6 @@ function drawSky(){
   ctx.fillStyle=g;ctx.fillRect(-3000,-4000,6000,4000+yH);
   ctx.fillStyle=`rgb(${HAZE[0]},${HAZE[1]},${HAZE[2]})`;ctx.fillRect(-3000,yH,6000,4000);
   ctx.restore();
-  // Sun - subdued, small, no blinding effect
   const sp=project(add(CAM.pos,mul(SUN,9500)));
   if(sp){
     const r=Math.min(60,CAM.focal*.06);
@@ -1038,30 +1290,22 @@ function drawPoly(pos,verts,q,col){
   ctx.fill();
 }
 
-// ============ FIXED EXHAUST GLOW - NO MORE BLINDING WHITE ============
 function drawExhaustGlow(pos,ab){
   const p=project(pos);if(!p)return;
-  // Skip glow when camera is very close (chase cam behind plane)
   if(p.d < 30) return;
-  
-  // Cap size to reasonable pixel radius (max 28px for afterburner, 14px normal)
   const maxR = ab ? 28 : 14;
   const r = clamp(ab ? p.s*5 : p.s*2.5, 1, maxR);
   if(r < 1.5) return;
-  
   const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r);
   if(ab){
-    // Afterburner: warm orange, not blinding white
     g.addColorStop(0,'rgba(255,180,80,.55)');
     g.addColorStop(0.4,'rgba(255,120,40,.3)');
     g.addColorStop(1,'rgba(255,60,20,0)');
   }else{
-    // Normal exhaust: subtle warm tone
     g.addColorStop(0,'rgba(255,120,60,.25)');
     g.addColorStop(0.5,'rgba(255,70,30,.1)');
     g.addColorStop(1,'rgba(255,40,20,0)');
   }
-  // Draw WITHOUT 'lighter' blend mode - prevents additive white-out
   ctx.fillStyle=g;
   ctx.beginPath();ctx.arc(p.x,p.y,r,0,TAU);ctx.fill();
 }
@@ -1070,18 +1314,14 @@ function drawF14(pos,q,scale){
   const s=scale;
   const isPlayer=G.player&&pos===G.player.pos;
   const ab=isPlayer&&G.player.ab;
-  
   drawBoxR(pos,[9.5*s,1.8*s,1.4*s],q,'#8a8d90');
-  
   const nosePos=add(pos,qRot(q,v3(3.5*s,0,0)));
   drawBoxR(nosePos,[3*s,1.2*s,1.1*s],q,'#9a9da0');
-  
   const noseTip=add(pos,qRot(q,v3(5.5*s,0,0)));
   const tipVerts=[
     v3(0,0.5*s,0.4*s),v3(0,-0.5*s,0.4*s),v3(0,0.5*s,-0.4*s),v3(0,-0.5*s,-0.4*s),v3(1.2*s,0,0)
   ];
   drawPoly(noseTip,tipVerts,q,'#7a7d80');
-  
   const nacOffset=1.6*s;
   const nacLen=5.5*s;
   const nacW=1.05*s;
@@ -1090,13 +1330,11 @@ function drawF14(pos,q,scale){
   const rNac=add(pos,qRot(q,v3(nacBack,-nacOffset,0)));
   drawBoxR(lNac,[nacLen,nacW,nacW],q,'#6a6d70');
   drawBoxR(rNac,[nacLen,nacW,nacW],q,'#6a6d70');
-  
   const intakePos=2.5*s;
   const lIntake=add(pos,qRot(q,v3(intakePos,nacOffset,0)));
   const rIntake=add(pos,qRot(q,v3(intakePos,-nacOffset,0)));
   drawBoxR(lIntake,[1.8*s,1.2*s,0.9*s],q,'#4a4d50');
   drawBoxR(rIntake,[1.8*s,1.2*s,0.9*s],q,'#4a4d50');
-  
   const tailBack=-4.5*s;
   const tailH=2.2*s;
   const lTail=add(pos,qRot(q,v3(tailBack,nacOffset,tailH/2+0.4*s)));
@@ -1105,30 +1343,23 @@ function drawF14(pos,q,scale){
   const rTailQ=qMul(q,qAxis(v3(1,0,0),15*RAD));
   drawBoxR(lTail,[1.6*s,0.14*s,tailH],lTailQ,'#7a7d80');
   drawBoxR(rTail,[1.6*s,0.14*s,tailH],rTailQ,'#7a7d80');
-  
   const hstabBack=-5.5*s;
   const hstabPos=add(pos,qRot(q,v3(hstabBack,0,0.3*s)));
   drawBoxR(hstabPos,[1.8*s,3.8*s,0.14*s],q,'#7a7d80');
-  
   drawF14Wing(pos,q,s,1);
   drawF14Wing(pos,q,s,-1);
-  
   const canopyFront=add(pos,qRot(q,v3(2.5*s,0,1.05*s)));
   drawBoxR(canopyFront,[2.2*s,1.1*s,0.7*s],q,'rgba(100,140,170,0.75)');
   const canopyRear=add(pos,qRot(q,v3(0.3*s,0,1.0*s)));
   drawBoxR(canopyRear,[1.8*s,1.0*s,0.65*s],q,'rgba(90,130,160,0.7)');
-  
   const gloveL=add(pos,qRot(q,v3(1.5*s,1.2*s,0.2*s)));
   const gloveR=add(pos,qRot(q,v3(1.5*s,-1.2*s,0.2*s)));
   drawBoxR(gloveL,[2.5*s,1.0*s,0.4*s],q,'#858890');
   drawBoxR(gloveR,[2.5*s,1.0*s,0.4*s],q,'#858890');
-  
-  // Fixed exhaust glow - no more blinding white
   const exL=add(pos,qRot(q,v3(-5.2*s,nacOffset,0)));
   const exR=add(pos,qRot(q,v3(-5.2*s,-nacOffset,0)));
   drawExhaustGlow(exL,ab);
   drawExhaustGlow(exR,ab);
-  
   if(Math.floor(G.time*2)%2===0){
     const navL=add(pos,qRot(q,v3(-1.5*s,5.5*s,0.15*s)));
     const navR=add(pos,qRot(q,v3(-1.5*s,-5.5*s,0.15*s)));
@@ -1232,7 +1463,7 @@ function outlineText(text,x,y,color,strokeColor='#000',strokeW=3){
 function getHint(){
   const P=G.player;if(!P||P.dead||G.state!=='play')return null;
   if(G.missiles.some(m=>m.from==='e'&&m.tgt==='player'))return{t:'موشک دشمن نزدیک است! شراره بریزید و بپیچید: کلید F',c:'#ff8080'};
-  if(G.lock.st===2&&(P.phoenixes>0||P.sparrows>0))return{t:'قفل کامل — E=فینیکس یا B=اسپارو',c:'#7dff8e'};
+  if(G.lock.st===2&&(P.phoenixes>0||P.sparrows>0))return{t:'قفل کامل — E=فینیکس (رادار فعال) یا B=اسپارو',c:'#7dff8e'};
   for(const e of G.enemies){if(!e.dead&&e.type==='cruise'&&e.tgtCity&&e.tgtCity.alive){
     if(dist(e.pos,v3(e.tgtCity.x,e.tgtCity.y,e.tgtCity.z))<2000){
       return{t:'⚠ کروز در حال نزدیک‌شدن به '+e.tgtCity.name,c:'#ff8040'};}}}
@@ -1255,17 +1486,84 @@ function drawHint(){
   ctx.fillText(h.t,W2,y+hh/2+1);
   ctx.direction='ltr';ctx.restore();}
 
+function drawMissileTracker(){
+  const u=Hpx/950;
+  const active = G.activeMslHUD.filter(h => h.mslRef || (h.resolved && G.time < h.endT));
+  if(active.length === 0) return;
+  const panelW = 220*u;
+  const rowH = 22*u;
+  const panelH = 28*u + active.length * rowH + 8*u;
+  const px = Wpx - panelW - 16*u;
+  const py = 110*u;
+  ctx.save();
+  ctx.fillStyle='rgba(0,0,0,.78)';
+  ctx.fillRect(px,py,panelW,panelH);
+  ctx.strokeStyle='#00ff66';
+  ctx.lineWidth=1.5;
+  ctx.strokeRect(px,py,panelW,panelH);
+  ctx.fillStyle='rgba(0,255,102,.15)';
+  ctx.fillRect(px,py,panelW,22*u);
+  ctx.fillStyle='#00ff66';
+  ctx.font=`700 ${11*u}px Consolas,monospace`;
+  ctx.textAlign='left';
+  ctx.textBaseline='middle';
+  ctx.fillText('▸ ACTIVE MISSILES', px+8*u, py+11*u);
+  ctx.textAlign='right';
+  ctx.fillText(active.length, px+panelW-8*u, py+11*u);
+  let ry = py + 28*u;
+  for(const h of active){
+    let status, statusCol, mainCol;
+    let line2 = '';
+    if(h.resolved){
+      if(h.result==='HIT'){
+        status='✓ HIT'; statusCol='#7dff8e'; mainCol='#7dff8e';
+      } else if(h.result==='MISSED'){
+        status='✗ MISS'; statusCol='#ffb454'; mainCol='#ffb454';
+      } else if(h.result==='GROUND'){
+        status='✗ GND'; statusCol='#ff5f5f'; mainCol='#ff5f5f';
+      } else {
+        status='?'; statusCol='#888'; mainCol='#888';
+      }
+      line2 = '—';
+    } else {
+      const dKm = (h.lastDist/1000).toFixed(1);
+      const eta = h.lastETA.toFixed(1);
+      status = 'TRK';
+      statusCol = h.lastETA < 2 ? '#ffaa00' : '#00ff66';
+      mainCol = '#ffffff';
+      line2 = dKm+'KM / '+eta+'s';
+    }
+    const blink = h.resolved && Math.floor(G.time*4)%2===0;
+    if(blink) {
+      ctx.fillStyle = h.result==='HIT' ? 'rgba(100,255,100,.15)' : 'rgba(255,100,100,.15)';
+      ctx.fillRect(px+2*u, ry, panelW-4*u, rowH);
+    }
+    ctx.fillStyle = mainCol;
+    ctx.font = `700 ${11*u}px Consolas,monospace`;
+    ctx.textAlign='left';
+    ctx.textBaseline='middle';
+    ctx.fillText(h.type, px+8*u, ry + rowH/2);
+    ctx.fillStyle = statusCol;
+    ctx.font = `700 ${10*u}px Consolas,monospace`;
+    ctx.textAlign='right';
+    ctx.fillText(status, px+60*u, ry + rowH/2);
+    ctx.fillStyle = h.resolved ? '#888' : '#cfeecb';
+    ctx.font = `${10*u}px Consolas,monospace`;
+    ctx.fillText(line2, px+panelW-8*u, ry + rowH/2);
+    ry += rowH;
+  }
+  ctx.restore();
+}
+
 function drawHUD(){
   const P=G.player;if(!P)return;const u=Hpx/950;
   ctx.save();
   const hc='#00ff66';
   const hcDim='rgba(0,255,102,.6)';
   const txtCol='#ffffff';
-  
   ctx.strokeStyle=hc;ctx.fillStyle=hc;ctx.lineWidth=2.0;
   ctx.font=`${12*u}px Consolas,'Courier New',monospace`;ctx.textBaseline='middle';
   if(P.dead){ctx.restore();return;}
-  
   ctx.save();ctx.beginPath();ctx.rect(W2-300*u,H2c-190*u,600*u,380*u);ctx.clip();
   ctx.translate(W2,H2c);ctx.rotate(hAng);
   const yH=Math.tan(pitchCam)*CAM.focal;
@@ -1279,12 +1577,10 @@ function drawHUD(){
       outlineText(String(Math.abs(a)),w+8*u,y,hc,'#000',3);
       outlineText(String(Math.abs(a)),-w-26*u,y,hc,'#000',3);}}
   ctx.restore();
-  
   const vd=len(P.vel)>5?project(add(CAM.pos,mul(norm(P.vel),3000))):null;
   if(vd){ctx.strokeStyle=hc;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(vd.x,vd.y,8*u,0,TAU);ctx.stroke();
     ctx.beginPath();ctx.moveTo(vd.x-24*u,vd.y);ctx.lineTo(vd.x-8*u,vd.y);ctx.moveTo(vd.x+8*u,vd.y);ctx.lineTo(vd.x+24*u,vd.y);
     ctx.moveTo(vd.x,vd.y-8*u);ctx.lineTo(vd.x,vd.y-16*u);ctx.stroke();}
-  
   const hdg=(Math.atan2(P.f.x,P.f.y)/RAD+360)%360;
   ctx.textAlign='center';
   ctx.fillStyle='rgba(0,0,0,.6)';
@@ -1301,7 +1597,6 @@ function drawHUD(){
   ctx.fillStyle='rgba(0,0,0,.7)';
   ctx.fillRect(W2-40*u,54*u,80*u,24*u);
   outlineText(String(Math.round(hdg)).padStart(3,'0')+'°',W2,66*u,txtCol,'#000',4);
-  
   const spd=Math.round(P.spd*3.6);
   ctx.textAlign='right';
   ctx.fillStyle='rgba(0,0,0,.6)';
@@ -1320,7 +1615,6 @@ function drawHUD(){
   ctx.font=`${11*u}px Consolas,monospace`;
   outlineText('KM/H',W2-198*u,H2c+32*u,hc,'#000',2);
   outlineText('AoA '+(P.aoa/RAD).toFixed(1),W2-198*u,H2c+52*u,hc,'#000',2);
-  
   const alt=Math.round(P.pos.z);ctx.textAlign='left';
   ctx.fillStyle='rgba(0,0,0,.6)';
   ctx.fillRect(W2+188*u,H2c-24*u,84*u,48*u);
@@ -1339,7 +1633,6 @@ function drawHUD(){
   outlineText('VS '+Math.round(P.vel.z),W2+198*u,H2c+32*u,hc,'#000',2);
   outlineText('AGL '+Math.max(0,Math.round(P.pos.z-terrainH(P.pos.x,P.pos.y))),W2+198*u,H2c+52*u,hc,'#000',2);
   outlineText('G '+P.g.toFixed(1)+(P.g>9?' ▲':''),W2+210*u,H2c+110*u,hc,'#000',2);
-  
   ctx.fillStyle='rgba(0,0,0,.5)';
   ctx.fillRect(W2+284*u,H2c-62*u,16*u,144*u);
   ctx.strokeStyle=hc;ctx.lineWidth=2;
@@ -1352,7 +1645,6 @@ function drawHUD(){
   outlineText((P.thr*100).toFixed(0)+'%'+(P.ab?' AB':''),W2+240*u,H2c+92*u,P.ab?'#ffb454':hc,'#000',3);
   if(keys.KeyX){ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(W2+225*u,H2c+100*u,75*u,18*u);
     outlineText('SPD BRK',W2+230*u,H2c+112*u,'#ffb454','#000',3);}
-  
   ctx.textAlign='left';
   const wp=[['GUN',P.ammo],['PHX',P.phoenixes||0],['SPR',P.sparrows||0],['FLR',P.flare]];
   wp.forEach((w,i)=>{const x=W2-330*u+i*74*u,y=Hpx-96*u;
@@ -1373,7 +1665,6 @@ function drawHUD(){
   ctx.fillStyle='rgba(0,0,0,.6)';
   ctx.fillRect(W2-330*u,Hpx-120*u,120*u,16*u);
   outlineText(G.camMode==='chase'?'CAM: CHASE':'CAM: COCKPIT',W2-325*u,Hpx-108*u,hc,'#000',2);
-  
   const L=G.lock;
   if(L.t&&!L.t.dead){const tp=project(L.t.pos);
     if(tp){const s=clamp(28*tp.s,12,65),col=L.st===2?'#00ff66':'#ffaa00';
@@ -1388,7 +1679,6 @@ function drawHUD(){
       ctx.textAlign='left';ctx.font=`${12*u}px Consolas,monospace`;
       outlineText('R '+Math.round(dist(P.pos,L.t.pos)),tp.x+s+8*u,tp.y-4*u,col,'#000',2);
       outlineText(L.st===2?'LOCK':'LOCKING…',tp.x+s+8*u,tp.y+8*u,col,'#000',2);}}
-  
   const rx=W2,ry=Hpx-150*u,rr=86*u,range=5200;
   ctx.fillStyle='rgba(0,10,0,.85)';ctx.beginPath();ctx.arc(rx,ry,rr,0,TAU);ctx.fill();
   ctx.strokeStyle=hc;ctx.lineWidth=1.5;
@@ -1406,6 +1696,7 @@ function drawHUD(){
     ctx.restore();}
   for(const e of G.enemies)if(!e.dead)blip(e.pos.x,e.pos.y,'#ff3a3a');
   for(const m of G.missiles)if(m.from==='e')blip(m.pos.x,m.pos.y,'#ff0000');
+  for(const m of G.missiles)if(m.from==='p')blip(m.pos.x,m.pos.y,'#00ffff');
   for(const c of G.cities)if(c.alive)blip(c.x,c.y,'#00ff66');
   ctx.fillStyle='#00ff66';ctx.save();ctx.translate(rx,ry);ctx.beginPath();ctx.moveTo(0,-6*u);ctx.lineTo(5*u,5*u);ctx.lineTo(-5*u,5*u);ctx.closePath();ctx.fill();ctx.restore();
   ctx.textAlign='center';
@@ -1424,7 +1715,6 @@ function drawHUD(){
   if(G.rwrT>0&&Math.floor(G.time*6)%2===0){
     ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(rx-30*u,ry-rr-22*u,60*u,18*u);
     outlineText('RWR',rx,ry-rr-10*u,'#ff3a3a','#000',3);}
-  
   const warns=[];
   if(P.aoa>.3&&P.spd<120)warns.push(['STALL','#ff5f5f']);
   if(P.pos.z-terrainH(P.pos.x,P.pos.y)<130&&P.vel.z<-45)warns.push(['PULL UP','#ff5f5f']);
@@ -1438,21 +1728,69 @@ function drawHUD(){
     ctx.font=`800 ${21*u}px Consolas,monospace`;
     outlineText(w[0],W2,H2c+120*u+i*28*u,w[1],'#000',4);});
   
-  ctx.font=`600 ${15*u}px 'Segoe UI',Tahoma`;ctx.textAlign='center';ctx.direction='rtl';
-  const ob=G.objectives.find(o=>!o.done());
-  if(ob){
-    ctx.fillStyle='rgba(0,0,0,.7)';
-    const ow=ctx.measureText('◈ '+ob.label+'   '+ob.prog()).width+20*u;
-    ctx.fillRect(W2-ow/2,70*u,ow,22*u);
-    outlineText('◈ '+ob.label+'   '+ob.prog(),W2,86*u,txtCol,'#000',3);
+  // ========== NEW: OBJECTIVES PANEL (shows all objectives) ==========
+  ctx.font=`600 ${13*u}px 'Segoe UI',Tahoma`;
+  ctx.textAlign='center';ctx.direction='rtl';
+  
+  // Draw all objectives in a compact panel at the top
+  const objCount = G.objectives.length;
+  const objRowH = 20*u;
+  const objPanelH = 16*u + objCount * objRowH + 4*u;
+  const objPanelW = 380*u;
+  const objPanelX = W2 - objPanelW/2;
+  const objPanelY = 12*u;
+  
+  // Panel background
+  ctx.fillStyle='rgba(0,0,0,.75)';
+  ctx.fillRect(objPanelX, objPanelY, objPanelW, objPanelH);
+  ctx.strokeStyle='rgba(0,255,102,.4)';
+  ctx.lineWidth=1;
+  ctx.strokeRect(objPanelX, objPanelY, objPanelW, objPanelH);
+  
+  // Draw each objective
+  let oy = objPanelY + 16*u;
+  for(const o of G.objectives){
+    const isDone = o.done();
+    const icon = isDone ? '✓' : '◆';
+    const col = isDone ? '#7dff8e' : '#ffd76a';
+    const txtCol = isDone ? '#7dff8e' : '#ffffff';
+    
+    // Icon
+    ctx.fillStyle = col;
+    ctx.font = `700 ${12*u}px 'Segoe UI',Tahoma`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(icon, objPanelX + 18*u, oy);
+    
+    // Label + progress
+    ctx.fillStyle = txtCol;
+    ctx.font = `${11*u}px 'Segoe UI',Tahoma`;
+    ctx.textAlign = 'left';
+    const text = o.label + '  ' + o.prog();
+    ctx.fillText(text, objPanelX + 24*u, oy);
+    
+    // Strikethrough for completed objectives
+    if(isDone){
+      const tw = ctx.measureText(text).width;
+      ctx.strokeStyle = 'rgba(125,255,142,.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(objPanelX + 24*u, oy);
+      ctx.lineTo(objPanelX + 24*u + tw, oy);
+      ctx.stroke();
+    }
+    
+    oy += objRowH;
   }
+  ctx.textAlign='center';
+  
   const aliveCities=G.cities.filter(c=>c.alive).length;
   ctx.font=`600 ${13*u}px 'Segoe UI',Tahoma`;
   const csTxt=`شهرها: ${aliveCities}/${G.cities.length} | از دست رفته: ${G.citiesLost}/3`;
   const csw=ctx.measureText(csTxt).width+20*u;
   ctx.fillStyle='rgba(0,0,0,.7)';
-  ctx.fillRect(W2-csw/2,50*u,csw,20*u);
-  outlineText(csTxt,W2,64*u,G.citiesLost>=2?'#ff5f5f':'#ffd76a','#000',3);
+  ctx.fillRect(W2-csw/2,objPanelY + objPanelH + 4*u,csw,20*u);
+  outlineText(csTxt,W2,objPanelY + objPanelH + 14*u,G.citiesLost>=2?'#ff5f5f':'#ffd76a','#000',3);
   
   ctx.direction='ltr';ctx.font=`${12*u}px Consolas,monospace`;
   ctx.fillStyle='rgba(0,0,0,.7)';
@@ -1461,7 +1799,6 @@ function drawHUD(){
   const mm=String(Math.floor(G.time/60)).padStart(2,'0'),ss=String(Math.floor(G.time%60)).padStart(2,'0');
   outlineText(`T+${mm}:${ss}  SCORE ${G.score}`,16*u,22*u,hc,'#000',2);
   outlineText(MISSIONS[G.mi].code,16*u,40*u,hc,'#000',2);
-  
   ctx.textAlign='right';ctx.direction='rtl';ctx.font=`600 ${13*u}px 'Segoe UI',Tahoma`;
   G.msgs.forEach((m,i)=>{ctx.globalAlpha=clamp(m.t/.8,0,1);
     const mw=ctx.measureText(m.txt).width+16*u;
@@ -1470,7 +1807,6 @@ function drawHUD(){
     ctx.fillStyle=m.c;
     ctx.fillText(m.txt,Wpx-16*u,Hpx-200*u-i*22*u);});
   ctx.globalAlpha=1;ctx.direction='ltr';
-  
   if(G.ann){const a=clamp(G.ann.t/3.4,0,1);ctx.globalAlpha=Math.min(1,a*3);
     ctx.textAlign='center';ctx.direction='rtl';
     ctx.font=`900 ${34*u}px 'Segoe UI',Tahoma`;
@@ -1481,11 +1817,11 @@ function drawHUD(){
     ctx.font=`${13*u}px Consolas`;
     outlineText(G.ann.sub,W2,H2c-40*u,'#9fe8a0','#000',2);
     ctx.globalAlpha=1;ctx.direction='ltr';}
-  
   ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(16*u,52*u,150*u,8*u);
   ctx.strokeStyle=hc;ctx.lineWidth=1.5;ctx.strokeRect(16*u,52*u,150*u,8*u);
   ctx.fillStyle=P.hp>50?'#00ff66':P.hp>25?'#ffb454':'#ff3a3a';
   ctx.fillRect(16*u,52*u,150*u*P.hp/100,8*u);
+  drawMissileTracker();
   drawHint();
   ctx.restore();}
 
@@ -1578,7 +1914,7 @@ function objPreview(i){
   const map=[
     ['انهدام ۶ پهپاد آموزشی','حفاظت از شهر'],
     ['انهدام ۸ پهپاد انتحاری','حفاظت از تهران'],
-    ['سرنگونی ۳ جنگنده','انهدام ۴ کروز','حفاظت از بندر عباس'],
+    ['سرنگونی ۳ جنگنده','انهدام ۴ کروز','حفاظت از سایت‌ها'],
     ['سرنگونی ۳ جنگنده','انهدام ۴ پهپاد','سرنگونی تک‌خال','حفاظت از اصفهان'],
     ['انهدام ۱۰ پهپاد','سرنگونی ۴ جنگنده','انهدام ۵ کروز','سرنگونی ۲ تک‌خال','حفاظت از شهرها']
   ];
@@ -1604,8 +1940,8 @@ function buildBrief(i){
        <div class="ptitle">LOADOUT ▮ تسلیحات</div>
        <div class="loadout">
          <div class="lo"><b>${m.lo.ammo}</b><span>توپ M61 20mm</span></div>
-         <div class="lo"><b>${Math.floor(m.lo.msl*1.5)}</b><span>AIM-54 فینیکس</span></div>
-         <div class="lo"><b>${m.lo.msl}</b><span>AIM-7 اسپارو</span></div>
+         <div class="lo"><b>${Math.floor(m.lo.msl*1.5)}</b><span>AIM-54 فینیکس (ARH)</span></div>
+         <div class="lo"><b>${m.lo.msl}</b><span>AIM-7 اسپارو (SARH)</span></div>
          <div class="lo"><b>${m.lo.flare}</b><span>شراره</span></div>
        </div>
      </div>
@@ -1627,7 +1963,7 @@ function togglePause(){
 
 const BOOT=['AWG-9 RADAR .......... OK','TCS (TV) ............ OK','AN/ALR-45 RWR ........ OK',
  'TF-30-P-414A ENGINES . OK','FLY-BY-WIRE ........... OK','M61A1 20MM ............ READY',
- 'AIM-54 PHOENIX x6 ..... LOADED','AIM-7 SPARROW x4 ...... LOADED','FLARES x8 ............ LOADED',
+ 'AIM-54 PHOENIX x6 (ARH) LOADED','AIM-7 SPARROW x4 (SARH) LOADED','FLARES x8 ............ LOADED',
  '>> IRIAF DEFENSE SYSTEM READY'];
 (function typeBoot(){const el=document.getElementById('bootlog');let li=0,ci=0,out='';
   const t=setInterval(()=>{
