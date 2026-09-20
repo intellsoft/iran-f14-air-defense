@@ -73,7 +73,6 @@ h1.title .en{font-family:var(--f-mono);color:#ff8f3a;letter-spacing:.06em}
 .mnum{font-family:var(--f-mono);font-size:20px;color:#b5936f;direction:ltr;text-align:center;border:1px solid #453225;padding:5px 0}
 .mname b{font-size:16px}
 .mname .mono{display:block;font-size:9px;color:#ae8f6f;margin-top:3px}
-.mthreat{display:none}
 .mstars{font-size:18px;color:#ffd76a;text-align:left;direction:ltr}
 .mstars small{display:block;font-size:9px;color:#ae8f6f;font-family:var(--f-mono)}
 .briefwrap{max-width:920px;margin:1vh auto;display:grid;grid-template-columns:1fr;gap:14px}
@@ -111,7 +110,6 @@ body.touch-mode .keys{display:none}
 /* ============ TOUCH CONTROLS UI ============ */
 #touch-ui{position:fixed;inset:0;z-index:15;pointer-events:none;display:none}
 body.touch-mode #touch-ui.active{display:block}
-
 #tc-joystick{position:absolute;bottom:28px;left:24px;width:120px;height:120px;pointer-events:auto;touch-action:none}
 #tc-joy-base{position:absolute;inset:0;border-radius:50%;background:rgba(15,25,15,.5);
   border:2px solid rgba(120,220,130,.4);box-shadow:inset 0 0 15px rgba(0,0,0,.5),0 0 12px rgba(120,220,130,.1)}
@@ -120,7 +118,6 @@ body.touch-mode #touch-ui.active{display:block}
   border:2px solid rgba(180,255,200,.6);box-shadow:0 3px 10px rgba(0,0,0,.5);
   touch-action:none;transition:box-shadow .1s}
 #tc-joy-knob.active{box-shadow:0 0 18px rgba(120,255,140,.6),0 3px 10px rgba(0,0,0,.5)}
-
 #tc-throttle{position:absolute;left:24px;top:50%;transform:translateY(-50%);width:50px;height:160px;
   pointer-events:auto;touch-action:none}
 #tc-thr-track{position:absolute;left:15px;top:0;width:20px;height:100%;border-radius:10px;
@@ -131,7 +128,6 @@ body.touch-mode #touch-ui.active{display:block}
   font-family:var(--f-mono);font-size:10px;color:#8adf8a;letter-spacing:1px}
 #tc-thr-val{position:absolute;left:0;bottom:-18px;width:100%;text-align:center;
   font-family:var(--f-mono);font-size:10px;color:#8adf8a}
-
 #tc-buttons{position:absolute;bottom:24px;right:20px;pointer-events:auto;display:grid;
   grid-template-columns:repeat(2,56px);grid-auto-rows:56px;gap:8px}
 .tc-btn{border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -147,14 +143,12 @@ body.touch-mode #touch-ui.active{display:block}
 .tc-btn.flr{border-color:rgba(255,220,100,.6);color:#ffe8a0;background:rgba(40,35,15,.6)}
 .tc-btn.cam,.tc-btn.brk{border-color:rgba(150,150,150,.5);color:#c0c0c0;background:rgba(25,25,25,.6)}
 .tc-btn.yaw-l,.tc-btn.yaw-r{border-color:rgba(200,200,120,.5);color:#e0e0a0;background:rgba(35,35,20,.6)}
-
 #tc-top{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto}
 .tc-top-btn{padding:6px 14px;border-radius:4px;font-family:var(--f-mono);font-size:11px;
   background:rgba(20,25,20,.7);border:1px solid rgba(120,220,130,.4);color:#a0e8a8;
   cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}
 .tc-top-btn:active{background:rgba(40,60,40,.8)}
 
-/* ============ MOBILE RESPONSIVE ============ */
 @media(max-width:600px){
   .menu-grid{padding:0}
   h1.title{font-size:clamp(24px,6vw,36px)}
@@ -185,15 +179,9 @@ body.touch-mode #touch-ui.active{display:block}
 <div id="fx-scan"></div>
 <div id="flash"></div>
 
-<!-- ============ TOUCH CONTROLS ============ -->
 <div id="touch-ui">
-  <div id="tc-top">
-    <div class="tc-top-btn" id="tc-pause">⏸ PAUSE</div>
-  </div>
-  <div id="tc-joystick">
-    <div id="tc-joy-base"></div>
-    <div id="tc-joy-knob"></div>
-  </div>
+  <div id="tc-top"><div class="tc-top-btn" id="tc-pause">⏸ PAUSE</div></div>
+  <div id="tc-joystick"><div id="tc-joy-base"></div><div id="tc-joy-knob"></div></div>
   <div id="tc-throttle">
     <div id="tc-thr-label">THR</div>
     <div id="tc-thr-track"><div id="tc-thr-fill"></div></div>
@@ -233,7 +221,7 @@ body.touch-mode #touch-ui.active{display:block}
           <select id="set-qual"><option value="low">کم</option><option value="med" selected>متوسط</option><option value="high">زیاد</option></select></div>
         <div class="srow"><label>معکوس پیچ</label><input type="checkbox" id="set-inv" style="width:22px;height:22px"></div>
       </div>
-      <div class="foot mono">V1.5 ▮ STARS: <span id="stars-total">0/15</span></div>
+      <div class="foot mono">V1.6 ▮ STARS: <span id="stars-total">0/15</span></div>
     </div>
     <div>
       <div class="panel boot"><div class="ptitle">SYSTEM DIAGNOSTICS</div><pre id="bootlog"></pre></div>
@@ -265,11 +253,8 @@ body.touch-mode #touch-ui.active{display:block}
     <h2 class="h2">کنترل‌های جنگنده</h2>
     <div class="touch-info">
       📱 <b>روی موبایل:</b><br>
-      ● جوی‌استیک پایین چپ: پیچ و غلتش (بالا/پایین = پیچ، چپ/راست = غلتش)<br>
-      ◀ ▶: سکان (چرخش راست/چپ)<br>
-      THR: گاز را با کشیدن انگشت بالا/پایین تنظیم کنید (پایین چپ)<br>
-      GUN: توپ — نگه دارید برای رگبار | PHX: فینیکس | SPR: اسپارو | FLR: شراره<br>
-      CAM: تغییر دوربین | BRK: ترمز هوایی
+      ● جوی‌استیک پایین چپ: پیچ و غلتش | ◀ ▶: سکان | THR: گاز<br>
+      GUN: توپ | PHX: فینیکس | SPR: اسپارو | FLR: شراره | CAM: دوربین | BRK: ترمز
     </div>
     <div class="keys">
       <div>پیچ <span><kbd>↑</kbd> <kbd>↓</kbd></span></div>
@@ -284,6 +269,13 @@ body.touch-mode #touch-ui.active{display:block}
       <div>دوربین <span><kbd>C</kbd></span></div>
       <div>توقف <span><kbd>Esc</kbd></span></div>
     </div>
+    <div class="stripe"></div>
+    <p style="line-height:1.9;font-size:13px;color:#d8b896">
+      ● <b>رهگیری چندگانه:</b> رادار AWG-9 می‌تواند تا ۴ هدف را همزمان قفل کند. هر هدف را در نشانگر نگه دارید تا قفل شود.<br>
+      ● <b>شلیک چندگانه:</b> بعد از شلیک فینیکس، قفل آزاد می‌شود و می‌توانید بلافاصله هدف بعدی را قفل و شلیک کنید.<br>
+      ● فینیکس رادار فعال دارد — بعد از شلیک می‌توانید دور شوید.<br>
+      ● اسپارو نیمه‌فعال است — بهتر است قفل را حفظ کنید.
+    </p>
     <button class="mbtn small" id="btn-back2">◂ بازگشت</button>
   </div>
 </div>
@@ -302,14 +294,14 @@ body.touch-mode #touch-ui.active{display:block}
 <script>
 "use strict";
 const TAU=Math.PI*2,RAD=Math.PI/180,NEAR=2;
-const clamp=(v,a,b)=>v<a?a:v>b?b:v, lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(v,a,b)=>v<a?a:v>b?b:v,lerp=(a,b,t)=>a+(b-a)*t;
 const sstep=(a,b,t)=>{t=clamp((t-a)/(b-a),0,1);return t*t*(3-2*t)};
 const v3=(x=0,y=0,z=0)=>({x,y,z});
-const add=(a,b)=>v3(a.x+b.x,a.y+b.y,a.z+b.z), sub=(a,b)=>v3(a.x-b.x,a.y-b.y,a.z-b.z);
+const add=(a,b)=>v3(a.x+b.x,a.y+b.y,a.z+b.z),sub=(a,b)=>v3(a.x-b.x,a.y-b.y,a.z-b.z);
 const mul=(a,s)=>v3(a.x*s,a.y*s,a.z*s);
-const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z, cross=(a,b)=>v3(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x);
-const len=a=>Math.hypot(a.x,a.y,a.z), norm=a=>{const l=len(a)||1;return v3(a.x/l,a.y/l,a.z/l)};
-const dist=(a,b)=>len(sub(a,b)), lerpV=(a,b,t)=>v3(lerp(a.x,b.x,t),lerp(a.y,b.y,t),lerp(a.z,b.z,t));
+const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z,cross=(a,b)=>v3(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x);
+const len=a=>Math.hypot(a.x,a.y,a.z),norm=a=>{const l=len(a)||1;return v3(a.x/l,a.y/l,a.z/l)};
+const dist=(a,b)=>len(sub(a,b)),lerpV=(a,b,t)=>v3(lerp(a.x,b.x,t),lerp(a.y,b.y,t),lerp(a.z,b.z,t));
 const rnd=(a=1,b)=>b===undefined?Math.random()*a:a+Math.random()*(b-a);
 function rotAxisV(v,k,th){const c=Math.cos(th),s=Math.sin(th),cr=cross(k,v),d=dot(k,v);
   return v3(v.x*c+cr.x*s+k.x*d*(1-c),v.y*c+cr.y*s+k.y*d*(1-c),v.z*c+cr.z*s+k.z*d*(1-c));}
@@ -333,7 +325,6 @@ let SV={v:1,m:{},set:{vol:.8,sens:1,inv:false,qual:'med'}};
 try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&s.v===1){SV=Object.assign(SV,s);SV.set=Object.assign({vol:.8,sens:1,inv:false,qual:'med'},s.set);}}catch(e){}
 function saveGame(){try{localStorage.setItem(SKEY,JSON.stringify(SV))}catch(e){}}
 
-// ============ DETECT TOUCH DEVICE ============
 let TOUCH_MODE=false;
 function detectTouch(){
   const isTouch='ontouchstart' in window||navigator.maxTouchPoints>0;
@@ -342,9 +333,7 @@ function detectTouch(){
   TOUCH_MODE=isTouch||(isMobileUA&&isSmall)||isMobileUA;
   if(TOUCH_MODE){
     document.body.classList.add('touch-mode');
-    if(!SV.set.qual||SV.set.qual!=='low'){
-      SV.set.qual='low';saveGame();
-    }
+    if(!SV.set.qual||SV.set.qual!=='low'){SV.set.qual='low';saveGame();}
   }
 }
 detectTouch();
@@ -432,13 +421,17 @@ let QUAL=QUALS[SV.set.qual]||QUALS.med;
 const SUN=norm(v3(.55,.42,.72)),HAZE=[210,185,155];
 const CAM={pos:v3(),q:Q(1,0,0,0),f:v3(1,0,0),r:v3(0,1,0),u:v3(0,0,1),focal:800,shake:0};
 let hAng=0,pitchCam=0;
+
+// ============ GAME STATE WITH MULTI-TARGET LOCK ============
 const G={screen:'menu',paused:false,time:0,state:'idle',mi:0,mission:null,
  player:null,enemies:[],projs:[],missiles:[],bombs:[],flares:[],parts:[],rings:[],clouds:[],spawns:[],scorch:[],
- cities:[],killCount:{},score:0,kills:0,shots:0,hits:0,dmgTaken:0,msgs:[],ann:null,lock:{t:null,tt:0,st:0},
+ cities:[],killCount:{},score:0,kills:0,shots:0,hits:0,dmgTaken:0,msgs:[],ann:null,
+ locks:[], // MULTI-TARGET LOCK SYSTEM: array of {target, lockTime, state}
  camMode:'chase',endT:0,failReason:'',beepT:0,rwrT:0,fl:0,boundW:false,stallHint:false,tut:null,
  citiesLost:0,mCenter:v3(),runway:null,spawn:null,objectives:[],at:{t:0},activeMslHUD:[]};
 
-// ============ TOUCH INPUT STATE ============
+const MAX_LOCKS=4; // AWG-9 can track up to 24, engage 6; we allow 4 simultaneous locks
+
 const TI={joy:{id:null,dx:0,dy:0,cx:0,cy:0},thr:{id:null,val:.7,startY:0,startVal:0},
  btn:{gun:false,brk:false,yawL:false,yawR:false}};
 
@@ -467,87 +460,49 @@ addEventListener('keyup',e=>{keys[e.code]=false});
 addEventListener('blur',()=>{if(G.screen==='playing'&&!G.paused)togglePause();});
 addEventListener('pointerdown',()=>{AU.init();AU.res();});
 
-// ============ TOUCH CONTROL SETUP ============
 function initTouchControls(){
   if(!TOUCH_MODE)return;
   const ui=document.getElementById('touch-ui');
-  
-  // Joystick
   const joy=document.getElementById('tc-joystick');
   const knob=document.getElementById('tc-joy-knob');
   const joyR=60;
-  
-  joy.addEventListener('pointerdown',e=>{
-    e.preventDefault();
+  joy.addEventListener('pointerdown',e=>{e.preventDefault();
     if(TI.joy.id!==null)return;
     TI.joy.id=e.pointerId;
     const rect=joy.getBoundingClientRect();
-    TI.joy.cx=rect.left+rect.width/2;
-    TI.joy.cy=rect.top+rect.height/2;
+    TI.joy.cx=rect.left+rect.width/2;TI.joy.cy=rect.top+rect.height/2;
     knob.classList.add('active');
-    joy.setPointerCapture(e.pointerId);
-    updJoy(e);
-  });
-  joy.addEventListener('pointermove',e=>{
-    if(TI.joy.id!==e.pointerId)return;
-    updJoy(e);
-  });
-  joy.addEventListener('pointerup',e=>{
-    if(TI.joy.id!==e.pointerId)return;
-    TI.joy.id=null;TI.joy.dx=0;TI.joy.dy=0;
-    knob.classList.remove('active');
-    knob.style.transform='translate(0,0)';
-  });
-  joy.addEventListener('pointercancel',e=>{
-    TI.joy.id=null;TI.joy.dx=0;TI.joy.dy=0;
-    knob.classList.remove('active');
-    knob.style.transform='translate(0,0)';
-  });
-  
+    joy.setPointerCapture(e.pointerId);updJoy(e);});
+  joy.addEventListener('pointermove',e=>{if(TI.joy.id!==e.pointerId)return;updJoy(e);});
+  joy.addEventListener('pointerup',e=>{if(TI.joy.id!==e.pointerId)return;
+    TI.joy.id=null;TI.joy.dx=0;TI.joy.dy=0;knob.classList.remove('active');knob.style.transform='translate(0,0)';});
+  joy.addEventListener('pointercancel',e=>{TI.joy.id=null;TI.joy.dx=0;TI.joy.dy=0;
+    knob.classList.remove('active');knob.style.transform='translate(0,0)';});
   function updJoy(e){
-    let dx=e.clientX-TI.joy.cx;
-    let dy=e.clientY-TI.joy.cy;
-    const d=Math.hypot(dx,dy);
-    const maxR=joyR-10;
+    let dx=e.clientX-TI.joy.cx,dy=e.clientY-TI.joy.cy;
+    const d=Math.hypot(dx,dy);const maxR=joyR-10;
     if(d>maxR){dx=dx/d*maxR;dy=dy/d*maxR;}
-    TI.joy.dx=dx/maxR;
-    TI.joy.dy=dy/maxR;
-    knob.style.transform=`translate(${dx}px,${dy}px)`;
-  }
-  
-  // Throttle slider
+    TI.joy.dx=dx/maxR;TI.joy.dy=dy/maxR;
+    knob.style.transform=`translate(${dx}px,${dy}px)`;}
   const thr=document.getElementById('tc-throttle');
   const thrFill=document.getElementById('tc-thr-fill');
   const thrVal=document.getElementById('tc-thr-val');
-  
-  thr.addEventListener('pointerdown',e=>{
-    e.preventDefault();
+  thr.addEventListener('pointerdown',e=>{e.preventDefault();
     if(TI.thr.id!==null)return;
-    TI.thr.id=e.pointerId;
-    TI.thr.startY=e.clientY;
-    TI.thr.startVal=TI.thr.val;
-    thr.setPointerCapture(e.pointerId);
-  });
-  thr.addEventListener('pointermove',e=>{
-    if(TI.thr.id!==e.pointerId)return;
-    const dy=TI.thr.startY-e.clientY;
-    const delta=dy/150;
+    TI.thr.id=e.pointerId;TI.thr.startY=e.clientY;TI.thr.startVal=TI.thr.val;
+    thr.setPointerCapture(e.pointerId);});
+  thr.addEventListener('pointermove',e=>{if(TI.thr.id!==e.pointerId)return;
+    const dy=TI.thr.startY-e.clientY;const delta=dy/150;
     TI.thr.val=clamp(TI.thr.startVal+delta,0,1);
-    thrFill.style.height=(TI.thr.val*100)+'%';
-    thrVal.textContent=Math.round(TI.thr.val*100)+'%';
-  });
+    thrFill.style.height=(TI.thr.val*100)+'%';thrVal.textContent=Math.round(TI.thr.val*100)+'%';});
   thr.addEventListener('pointerup',e=>{TI.thr.id=null;});
   thr.addEventListener('pointercancel',e=>{TI.thr.id=null;});
-  
-  // Buttons
   function bindBtn(id,down,up){
     const el=document.getElementById(id);
     el.addEventListener('pointerdown',e=>{e.preventDefault();el.classList.add('pressed');down&&down();});
     el.addEventListener('pointerup',e=>{el.classList.remove('pressed');up&&up();});
     el.addEventListener('pointercancel',e=>{el.classList.remove('pressed');up&&up();});
-    el.addEventListener('pointerleave',e=>{if(el.classList.contains('pressed')){el.classList.remove('pressed');up&&up();}});
-  }
-  
+    el.addEventListener('pointerleave',e=>{if(el.classList.contains('pressed')){el.classList.remove('pressed');up&&up();}});}
   bindBtn('tc-gun',()=>{TI.btn.gun=true;},()=>{TI.btn.gun=false;});
   bindBtn('tc-phx',()=>{if(G.screen==='playing'&&!G.paused&&G.player&&!G.player.dead)fireMissile('phoenix');});
   bindBtn('tc-spr',()=>{if(G.screen==='playing'&&!G.paused&&G.player&&!G.player.dead)fireMissile('sparrow');});
@@ -557,18 +512,11 @@ function initTouchControls(){
   bindBtn('tc-yaw-l',()=>{TI.btn.yawL=true;},()=>{TI.btn.yawL=false;});
   bindBtn('tc-yaw-r',()=>{TI.btn.yawR=true;},()=>{TI.btn.yawR=false;});
   bindBtn('tc-pause',()=>{if(G.screen==='playing')togglePause();});
-  
-  // Show/hide touch UI based on screen
   function updTouchUI(){
     ui.classList.toggle('active',G.screen==='playing'&&!G.paused);
-    if(G.player){
-      thrFill.style.height=(TI.thr.val*100)+'%';
-      thrVal.textContent=Math.round(TI.thr.val*100)+'%';
-    }
-    requestAnimationFrame(updTouchUI);
-  }
-  updTouchUI();
-}
+    if(G.player){thrFill.style.height=(TI.thr.val*100)+'%';thrVal.textContent=Math.round(TI.thr.val*100)+'%';}
+    requestAnimationFrame(updTouchUI);}
+  updTouchUI();}
 initTouchControls();
 
 function addMsg(t,c='#e8d0b6',d=4){G.msgs.push({t:d,ml:d,txt:t,c});if(G.msgs.length>5)G.msgs.shift();}
@@ -577,7 +525,7 @@ function announce(t,sub){G.ann={t:3.4,txt:t,sub:sub||''};}
 function resetWorld(){flats=[];G.enemies=[];G.projs=[];G.missiles=[];G.bombs=[];G.flares=[];G.parts=[];
   G.rings=[];G.clouds=[];G.spawns=[];G.scorch=[];G.cities=[];
   G.killCount={};G.score=0;G.kills=0;G.shots=0;G.hits=0;G.dmgTaken=0;G.citiesLost=0;
-  G.msgs=[];G.ann=null;G.lock={t:null,tt:0,st:0};G.time=0;G.endT=0;G.runway=null;G.spawn=null;
+  G.msgs=[];G.ann=null;G.locks=[];G.time=0;G.endT=0;G.runway=null;G.spawn=null;
   G.objectives=[];G.boundW=false;G.stallHint=false;G.tut=null;CAM.shake=0;G.activeMslHUD=[];}
 function makeClouds(cx,cy){const n=QUAL.clouds;for(let i=0;i<n;i++){
   const off=[];for(let k=0;k<3;k++)off.push([rnd(-.5,.5),rnd(-.25,.25),rnd(.5,.9)]);
@@ -622,6 +570,14 @@ function spawnAir(type,x,y,z,tag){
 
 const objKill=(tag,total,label)=>({label,done:()=>(G.killCount[tag]||0)>=total,prog:()=>`${Math.min(G.killCount[tag]||0,total)}/${total}`,notified:false});
 const objDefend=(label)=>({label,done:()=>G.citiesLost<3,prog:()=>`شهرها: ${G.citiesLost}/3 از دست رفته`,notified:false});
+
+function getTargetName(e){
+  if(!e)return'؟';
+  if(e.type==='drone')return'پهپاد';
+  if(e.type==='cruise')return'کروز';
+  if(e.type==='ace')return'تک‌خال';
+  if(e.type==='fighter')return'جنگنده';
+  return'هدف';}
 
 const MISSIONS=[
 {id:0,name:'آموزش دفاع',code:'TRAINING',threat:1,par:180,s2:900,s3:1300,
@@ -758,37 +714,55 @@ function dmgEnemy(e,d,byPlayer){if(!e||e.dead)return;e.hp-=d;
       addMsg('✓ '+h.type+' اصابت کرد!','#7dff8e',2.2);}}
     explode(e.pos,e.ground?2.6:e.type==='drone'?1.2:e.type==='cruise'?1.0:2);
     if(byPlayer){G.kills++;G.killCount[e.tag]=(G.killCount[e.tag]||0)+1;G.score+=PTS[e.tag]||500;
-      const label=e.type==='drone'?'پهپاد':e.type==='cruise'?'کروز':e.type==='ace'?'تک‌خال':'جنگنده';
-      addMsg(label+' منهدم شد  +'+(PTS[e.tag]||500),'#ffd76a');}}
+      addMsg(getTargetName(e)+' منهدم شد  +'+(PTS[e.tag]||500),'#ffd76a');}}
   else if(byPlayer)addPart(e.pos,v3(rnd(-8,8),rnd(-8,8),rnd(-4,8)),.3,.6,[255,200,120],'spark');}
 
-function fireMissile(type){const P=G.player,L=G.lock;
+// ============ MULTI-TARGET FIRE MISSILE ============
+function fireMissile(type){
+  const P=G.player;
+  if(!P||P.dead)return;
+  
+  // Find best lock (most mature lock that's fully locked)
+  let bestLock=null;
+  for(const l of G.locks){
+    if(l.state===2&&l.target&&!l.target.dead&&!l.target.reachedCity){
+      if(!bestLock||l.lockTime>bestLock.lockTime){
+        bestLock=l;
+      }
+    }
+  }
+  
   if(type==='phoenix'){
     if(!P.phoenixes||P.phoenixes<=0){addMsg('موشک فینیکس باقی نمانده','#ff9c9c',2);return;}
-    if(!L.t||L.t.dead||L.st<1){addMsg('ابتدا قفل کنید','#ffb454',2.5);return;}
+    if(!bestLock){addMsg('هیچ هدف قفل‌شده‌ای نیست — نشانگر را روی هدف نگه دارید','#ffb454',2.5);return;}
     P.phoenixes--;
-    const tgt=L.t;
+    const tgt=bestLock.target;
     const msl={pos:add(P.pos,add(mul(P.f,3.5),mul(P.u,-1))),vel:add(mul(P.f,350),P.vel),
       tgt:tgt,lastKnownPos:{...tgt.pos},lastKnownVel:tgt.vel?{...tgt.vel}:v3(),
       turn:4.5,life:9,from:'p',spd:380,trailT:0,mslType:'phoenix',
       activeRadar:true,launchTime:G.time,id:Math.random()};
     G.missiles.push(msl);
     G.activeMslHUD.push({id:msl.id,type:'PHX',mslRef:msl,startT:G.time,resolved:false,result:'TRACK',endT:0,lastDist:0,lastETA:0});
-    AU.msl();addMsg('فینیکس شلیک شد — رادار فعال','#cfeecb',3);
+    AU.msl();
+    addMsg('فینیکس شلیک شد → '+getTargetName(tgt),'#cfeecb',3);
+    // Phoenix has active radar: release the lock immediately so player can lock next target
+    G.locks=G.locks.filter(l=>l!==bestLock);
   }else{
     if(!P.sparrows||P.sparrows<=0){addMsg('موشک اسپارو باقی نمانده','#ff9c9c',2);return;}
-    if(L.st!==2||!L.t||L.t.dead){addMsg('قفل کامل لازم است','#ffb454',2.5);return;}
+    if(!bestLock){addMsg('هیچ هدف قفل‌شده‌ای نیست','#ffb454',2.5);return;}
     P.sparrows--;
-    const tgt=L.t;
+    const tgt=bestLock.target;
     const msl={pos:add(P.pos,add(mul(P.f,3.5),mul(P.u,-1))),vel:add(mul(P.f,300),P.vel),
       tgt:tgt,lastKnownPos:{...tgt.pos},lastKnownVel:tgt.vel?{...tgt.vel}:v3(),
       turn:5.2,life:7,from:'p',spd:320,trailT:0,mslType:'sparrow',
       activeRadar:false,launchTime:G.time,id:Math.random()};
     G.missiles.push(msl);
     G.activeMslHUD.push({id:msl.id,type:'SPR',mslRef:msl,startT:G.time,resolved:false,result:'TRACK',endT:0,lastDist:0,lastETA:0});
-    AU.msl();addMsg('اسپارو شلیک شد','#cfeecb',2);
+    AU.msl();
+    addMsg('اسپارو شلیک شد → '+getTargetName(tgt),'#cfeecb',2);
+    // Sparrow is semi-active: keep the lock for guidance
   }
-  L.st=0;L.tt=0;}
+}
 
 function dropFlares(){const P=G.player;if(P.flare<=0){addMsg('شراره‌ای باقی نمانده','#ff9c9c',2);return;}
   P.flare--;AU.flareS();G.fl=2.4;
@@ -796,36 +770,24 @@ function dropFlares(){const P=G.player;if(P.flare<=0){addMsg('شراره‌ای 
     vel:add(P.vel,add(mul(P.f,-60),v3(rnd(-40,40),rnd(-40,40),rnd(-50,-10)))),life:3});
   addMsg('شراره رها شد','#cfeecb',2);}
 
-// ============ UPDATE PLAYER (WITH TOUCH INPUT) ============
 function updatePlayer(dt){
   const P=G.player;if(!P||P.dead)return;
   const sens=SV.set.sens,inv=SV.set.inv?1:-1;
-  
-  // Read input: keyboard + touch
   let pIn=0,rIn=0,yIn=0;
-  
-  // Keyboard
   pIn+=((keys.ArrowUp?1:0)-(keys.ArrowDown?1:0))*(inv?-1:1);
   rIn+=(keys.ArrowRight?1:0)-(keys.ArrowLeft?1:0);
   yIn+=(keys.KeyD?1:0)-(keys.KeyA?1:0);
-  
-  // Touch joystick
   if(TOUCH_MODE){
     pIn+=-TI.joy.dy*(inv?-1:1);
     rIn+=TI.joy.dx;
     yIn+=(TI.btn.yawR?1:0)-(TI.btn.yawL?1:0);
   }
-  
   pIn=clamp(pIn,-1,1);rIn=clamp(rIn,-1,1);yIn=clamp(yIn,-1,1);
-  
-  // Throttle
-  if(TOUCH_MODE){
-    P.thr=TI.thr.val;
-  }else{
+  if(TOUCH_MODE){P.thr=TI.thr.val;}
+  else{
     if(keys.KeyW)P.thr=clamp(P.thr+dt*.55,0,1);
     if(keys.KeyS)P.thr=clamp(P.thr-dt*.65,0,1);
   }
-  
   P.ab=P.thr>.88;
   P.spd=len(P.vel);
   const eff=clamp(P.spd/200,.15,1)*(1-.45*clamp((P.aoa-.28)/.3,0,1));
@@ -1003,16 +965,44 @@ function updParts(dt){
     if(p.type==='trail')p.sz+=dt*2;
     p.p=add(p.p,mul(p.v,dt));}}
 
-function updLock(dt){const P=G.player,L=G.lock;
-  if(!P||P.dead){L.st=0;L.t=null;return;}
-  let best=null,bestA=9;
-  for(const e of G.enemies){if(e.dead||e.reachedCity)continue;const d=dist(e.pos,P.pos);if(d>6500)continue;
+// ============ MULTI-TARGET LOCK SYSTEM ============
+function updLocks(dt){
+  const P=G.player;
+  if(!P||P.dead){G.locks=[];return;}
+  
+  // Remove invalid locks (target dead, out of range, etc.)
+  G.locks=G.locks.filter(l=>{
+    if(!l.target||l.target.dead||l.target.reachedCity)return false;
+    return dist(l.target.pos,P.pos)<7500;
+  });
+  
+  // Find target in the crosshair/boresight
+  let best=null,bestA=0.42;
+  for(const e of G.enemies){
+    if(e.dead||e.reachedCity)continue;
+    const d=dist(e.pos,P.pos);
+    if(d>6500)continue;
     const a=Math.acos(clamp(dot(P.f,norm(sub(e.pos,P.pos))),-1,1));
-    if(a<.42&&a<bestA){bestA=a;best=e;}}
-  if(best!==L.t){L.t=best;L.tt=0;}
-  if(L.t){L.tt+=dt;L.st=L.tt>.85?2:1;
-    G.beepT-=dt;if(G.beepT<=0){AU.beep(L.st===2?1250:850,.05,L.st===2?.08:.04);G.beepT=L.st===2?.13:.4;}}
-  else{L.st=0;L.tt=0;}}
+    if(a<bestA){bestA=a;best=e;}
+  }
+  
+  if(best){
+    const existing=G.locks.find(l=>l.target===best);
+    if(existing){
+      existing.lockTime+=dt;
+      existing.state=existing.lockTime>.85?2:1;
+      // Audio feedback
+      G.beepT-=dt;
+      if(G.beepT<=0){
+        AU.beep(existing.state===2?1250:850,.05,existing.state===2?.08:.04);
+        G.beepT=existing.state===2?.13:.4;
+      }
+    }else if(G.locks.length<MAX_LOCKS){
+      // Add new lock
+      G.locks.push({target:best,lockTime:0,state:1});
+    }
+  }
+}
 
 function updSpawns(dt){for(const s of G.spawns){if(s.done)continue;
   if(s.t!==undefined){if(G.time>=s.t){s.done=true;s.fn();}}
@@ -1039,7 +1029,7 @@ function updSim(dt){G.time+=dt;
   updatePlayer(dt);
   for(const e of G.enemies){if(e.dead)continue;updAir(e,dt);}
   updProjs(dt);updMissiles(dt);updFlares(dt);updParts(dt);
-  updLock(dt);updSpawns(dt);checkObj();
+  updLocks(dt);updSpawns(dt);checkObj();
   CAM.shake*=Math.exp(-3.5*dt);
   for(const m of G.msgs)m.t-=dt;
   G.msgs=G.msgs.filter(m=>m.t>0);
@@ -1407,7 +1397,11 @@ function outlineText(text,x,y,color,strokeColor='#000',strokeW=3){
 function getHint(){
   const P=G.player;if(!P||P.dead||G.state!=='play')return null;
   if(G.missiles.some(m=>m.from==='e'&&m.tgt==='player'))return{t:'موشک دشمن! شراره + پیچ تند',c:'#ff8080'};
-  if(G.lock.st===2&&(P.phoenixes>0||P.sparrows>0))return{t:'قفل کامل — شلیک کنید!',c:'#7dff8e'};
+  const lockedCount=G.locks.filter(l=>l.state===2).length;
+  if(lockedCount>0&&(P.phoenixes>0||P.sparrows>0)){
+    if(lockedCount>=2)return{t:lockedCount+' هدف قفل‌شده — شلیک چندگانه!',c:'#7dff8e'};
+    return{t:'قفل کامل — شلیک کنید!',c:'#7dff8e'};
+  }
   for(const e of G.enemies){if(!e.dead&&e.type==='cruise'&&e.tgtCity&&e.tgtCity.alive){
     if(dist(e.pos,v3(e.tgtCity.x,e.tgtCity.y,e.tgtCity.z))<2000){
       return{t:'⚠ کروز نزدیک '+e.tgtCity.name,c:'#ff8040'};}}}
@@ -1528,7 +1522,6 @@ function drawHUD(){
   ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(W2+220*u,H2c+72*u,65*u,18*u);
   outlineText((P.thr*100).toFixed(0)+'%'+(P.ab?' AB':''),W2+225*u,H2c+82*u,P.ab?'#ffb454':hc,'#000',2);
   
-  // Weapon status (compact)
   ctx.textAlign='left';
   const wp=[['GUN',P.ammo],['PHX',P.phoenixes||0],['SPR',P.sparrows||0],['FLR',P.flare]];
   const wpX=W2-180*u;
@@ -1541,7 +1534,6 @@ function drawHUD(){
     ctx.font=`${14*u}px Consolas,monospace`;
     outlineText(String(w[1]),x+5*u,wpY+25*u,w[1]>0?txtCol:'#ff5f5f','#000',2);});
   
-  // Hide keyboard hints in touch mode, show touch labels instead
   if(!TOUCH_MODE){
     ctx.font=`${8*u}px Consolas,monospace`;
     const wl=['SPACE','E','B','F'];
@@ -1553,19 +1545,29 @@ function drawHUD(){
   ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(wpX,wpY-16*u,120*u,14*u);
   outlineText(G.camMode==='chase'?'CAM: CHASE':'CAM: COCKPIT',wpX+4*u,wpY-9*u,hc,'#000',2);
   
-  const L=G.lock;
-  if(L.t&&!L.t.dead&&!L.t.reachedCity){const tp=project(L.t.pos);
-    if(tp){const s=clamp(28*tp.s,12,65),col=L.st===2?'#00ff66':'#ffaa00';
-      ctx.strokeStyle=col;ctx.lineWidth=2.5;
+  // ============ DRAW ALL LOCKS (MULTI-TARGET) ============
+  for(let li=0;li<G.locks.length;li++){
+    const l=G.locks[li];
+    if(!l.target||l.target.dead||l.target.reachedCity)continue;
+    const tp=project(l.target.pos);
+    if(tp){
+      const s=clamp(28*tp.s,12,65);
+      const col=l.state===2?'#00ff66':'#ffaa00';
+      const lw=l.state===2?3:2;
+      ctx.strokeStyle=col;ctx.lineWidth=lw;
+      // Draw lock box corners
       ctx.beginPath();
       ctx.moveTo(tp.x-s,tp.y-s*.6);ctx.lineTo(tp.x-s,tp.y-s);ctx.lineTo(tp.x-s*.6,tp.y-s);
       ctx.moveTo(tp.x+s*.6,tp.y-s);ctx.lineTo(tp.x+s,tp.y-s);ctx.lineTo(tp.x+s,tp.y-s*.6);
       ctx.moveTo(tp.x+s,tp.y+s*.6);ctx.lineTo(tp.x+s,tp.y+s);ctx.lineTo(tp.x+s*.6,tp.y+s);
       ctx.moveTo(tp.x-s*.6,tp.y+s);ctx.lineTo(tp.x-s,tp.y+s);ctx.lineTo(tp.x-s,tp.y+s*.6);ctx.stroke();
-      ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(tp.x+s+4*u,tp.y-14*u,80*u,28*u);
+      // Lock number indicator
+      ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(tp.x+s+4*u,tp.y-16*u,85*u,30*u);
       ctx.textAlign='left';ctx.font=`${11*u}px Consolas,monospace`;
-      outlineText('R '+Math.round(dist(P.pos,L.t.pos)),tp.x+s+8*u,tp.y-4*u,col,'#000',2);
-      outlineText(L.st===2?'LOCK':'LOCKING…',tp.x+s+8*u,tp.y+8*u,col,'#000',2);}}
+      outlineText('R '+Math.round(dist(P.pos,l.target.pos)),tp.x+s+8*u,tp.y-5*u,col,'#000',2);
+      outlineText(l.state===2?'LOCK':'LOCKING…',tp.x+s+8*u,tp.y+8*u,col,'#000',2);
+    }
+  }
   
   const rx=W2,ry=Hpx-130*u,rr=70*u,range=5200;
   ctx.fillStyle='rgba(0,10,0,.8)';ctx.beginPath();ctx.arc(rx,ry,rr,0,TAU);ctx.fill();
@@ -1608,7 +1610,6 @@ function drawHUD(){
     ctx.font=`800 ${18*u}px Consolas,monospace`;
     outlineText(w[0],W2,H2c+108*u+i*26*u,w[1],'#000',4);});
   
-  // Objectives panel
   ctx.font=`600 ${12*u}px 'Segoe UI',Tahoma`;ctx.textAlign='center';ctx.direction='rtl';
   const objCount=G.objectives.length;
   const objRowH=18*u;
